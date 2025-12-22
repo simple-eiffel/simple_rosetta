@@ -41,7 +41,7 @@ feature -- Testing
 	is_leap_year (year: INTEGER): BOOLEAN
 			-- Is `year' a leap year?
 		do
-			Result := (year \ 4 = 0 and year \ 100 /= 0) or (year \ 400 = 0)
+			Result := (year \\ 4 = 0 and year \\ 100 /= 0) or (year \\ 400 = 0)
 		end
 
 end

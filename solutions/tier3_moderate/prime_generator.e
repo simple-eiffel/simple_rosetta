@@ -46,12 +46,12 @@ feature -- Prime Testing
 				Result := False
 			elseif n = 2 then
 				Result := True
-			elseif n \ 2 = 0 then
+			elseif n \\ 2 = 0 then
 				Result := False
 			else
 				Result := True
 				from i := 3 until i * i > n or not Result loop
-					if n \ i = 0 then
+					if n \\ i = 0 then
 						Result := False
 					end
 					i := i + 2

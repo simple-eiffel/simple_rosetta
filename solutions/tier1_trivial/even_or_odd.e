@@ -41,15 +41,15 @@ feature -- Testing
 	is_even (n: INTEGER): BOOLEAN
 			-- Is `n' an even number?
 		do
-			Result := n \ 2 = 0
+			Result := n \\ 2 = 0
 		ensure
-			definition: Result = (n \ 2 = 0)
+			definition: Result = (n \\ 2 = 0)
 		end
 
 	is_odd (n: INTEGER): BOOLEAN
 			-- Is `n' an odd number?
 		do
-			Result := n \ 2 /= 0
+			Result := n \\ 2 /= 0
 		ensure
 			opposite: Result = not is_even (n)
 		end

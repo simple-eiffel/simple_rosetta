@@ -38,7 +38,7 @@ feature -- Computation
 			from until num < 10 loop
 				sum := 0
 				from until num = 0 loop
-					sum := sum + num \ 10
+					sum := sum + num \\ 10
 					num := num // 10
 				end
 				num := sum

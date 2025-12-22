@@ -66,7 +66,7 @@ feature -- Validation
 				l_double := not l_double
 				l_i := l_i - 1
 			end
-			Result := l_sum \ 10 = 0
+			Result := l_sum \\ 10 = 0
 		end
 
 	calculate_check_digit (a_number: STRING): INTEGER
@@ -90,7 +90,7 @@ feature -- Validation
 				l_double := not l_double
 				l_i := l_i - 1
 			end
-			Result := (10 - (l_sum \ 10)) \ 10
+			Result := (10 - (l_sum \\ 10)) \\ 10
 		ensure
 			valid_digit: Result >= 0 and Result <= 9
 		end

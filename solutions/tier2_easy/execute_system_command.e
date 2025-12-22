@@ -3,7 +3,11 @@ note
 		Rosetta Code: Execute a system command
 		https://rosettacode.org/wiki/Execute_a_system_command
 		
-		Execute an operating system command.
+		Execute an operating system command and capture its output.
+
+		Uses: simple_process library (https://github.com/simple-eiffel/simple_process)
+		The simple_process library provides cross-platform process execution with
+		output capture. Add it to your ECF: $SIMPLE_PROCESS/simple_process.ecf
 
 		SECURITY WARNING: This is demo code only. Never pass untrusted
 		user input directly to shell commands. Use parameterized commands
@@ -23,20 +27,19 @@ feature {NONE} -- Initialization
 
 	make
 		local
-			process: PROCESS
+			proc: SIMPLE_PROCESS
 		do
 			print ("Executing 'dir' command:%N")
 			print ("========================%N")
 			
-			-- Using simple_process library
-			create process.make_with_command ("dir")
-			process.run
+			create proc.make
+			proc.run_command ("dir")
 			
-			if process.has_output then
-				print (process.output)
+			if attached proc.last_output as l_out then
+				print (l_out)
 			end
 			
-			print ("%NCommand exit code: " + process.exit_code.out + "%N")
+			print ("%NCommand exit code: " + proc.last_exit_code.out + "%N")
 		end
 
 end

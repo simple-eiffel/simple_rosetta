@@ -82,19 +82,19 @@ feature {NONE} -- Helpers
 	print_top_words (a_freq: HASH_TABLE [INTEGER, STRING]; a_n: INTEGER)
 			-- Print top n words by frequency.
 		local
-			l_sorted: ARRAYED_LIST [TUPLE [word: STRING; count: INTEGER]]
+			l_sorted: ARRAYED_LIST [TUPLE [word: STRING; cnt: INTEGER]]
 			l_i, l_j: INTEGER
-			l_temp: TUPLE [word: STRING; count: INTEGER]
+			l_temp: TUPLE [word: STRING; cnt: INTEGER]
 		do
 			create l_sorted.make (a_freq.count)
 			across a_freq as l_entry loop
-				l_sorted.extend ([l_entry.key, l_entry])
+				l_sorted.extend ([@l_entry.key, l_entry])
 			end
 
 			-- Simple bubble sort by count descending
 			from l_i := 1 until l_i >= l_sorted.count loop
 				from l_j := l_i + 1 until l_j > l_sorted.count loop
-					if l_sorted [l_j].count > l_sorted [l_i].count then
+					if l_sorted [l_j].cnt > l_sorted [l_i].count then
 						l_temp := l_sorted [l_i]
 						l_sorted [l_i] := l_sorted [l_j]
 						l_sorted [l_j] := l_temp
@@ -105,7 +105,7 @@ feature {NONE} -- Helpers
 			end
 
 			from l_i := 1 until l_i > a_n.min (l_sorted.count) loop
-				print ("  " + l_sorted [l_i].word + ": " + l_sorted [l_i].count.out + "%N")
+				print ("  " + l_sorted [l_i].word + ": " + l_sorted [l_i].cnt.out + "%N")
 				l_i := l_i + 1
 			end
 		end

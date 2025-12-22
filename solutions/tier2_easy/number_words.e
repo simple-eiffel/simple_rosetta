@@ -59,11 +59,11 @@ feature -- Conversion
 				create Result.make (100)
 
 				l_billions := l_n // 1000000000
-				l_n := l_n \ 1000000000
+				l_n := l_n \\ 1000000000
 				l_millions := l_n // 1000000
-				l_n := l_n \ 1000000
+				l_n := l_n \\ 1000000
 				l_thousands := l_n // 1000
-				l_remainder := l_n \ 1000
+				l_remainder := l_n \\ 1000
 
 				if l_billions > 0 then
 					Result.append (hundreds_to_words (l_billions) + " billion")
@@ -107,16 +107,16 @@ feature {NONE} -- Helpers
 		do
 			create Result.make (50)
 			l_h := a_n // 100
-			l_t := (a_n \ 100) // 10
-			l_o := a_n \ 10
+			l_t := (a_n \\ 100) // 10
+			l_o := a_n \\ 10
 
 			if l_h > 0 then
 				Result.append (ones [l_h + 1] + " hundred")
 			end
-			if a_n \ 100 > 0 then
+			if a_n \\ 100 > 0 then
 				if not Result.is_empty then Result.append (" ") end
-				if a_n \ 100 < 20 then
-					Result.append (ones [(a_n \ 100) + 1])
+				if a_n \\ 100 < 20 then
+					Result.append (ones [(a_n \\ 100) + 1])
 				else
 					Result.append (tens [l_t + 1])
 					if l_o > 0 then

@@ -3,10 +3,12 @@ note
 		Rosetta Code: Sum digits of an integer
 		https://rosettacode.org/wiki/Sum_digits_of_an_integer
 
-		Calculate the sum of all digits in an integer.
+		Sum the digits of a number.
 	]"
-	author: "Eiffel Solution"
+	author: "Simple Eiffel"
+	see_also: "https://github.com/simple-eiffel"
 	rosetta_task: "Sum_digits_of_an_integer"
+	tier: "2"
 
 class
 	SUM_DIGITS
@@ -17,41 +19,55 @@ create
 feature {NONE} -- Initialization
 
 	make
-			-- Demonstrate digit sum calculation.
+			-- Demonstrate digit sum.
 		do
-			print ("Sum of digits:%N")
-			print ("  1 -> " + sum_digits (1).out + "%N")
-			print ("  12345 -> " + sum_digits (12345).out + "%N")
-			print ("  123045 -> " + sum_digits (123045).out + "%N")
-			print ("  9999999 -> " + sum_digits (9999999).out + "%N")
+			print ("Sum of Digits%N")
+			print ("=============%N%N")
 
-			-- Different bases
-			print ("%NSum of digits in different bases:%N")
-			print ("  254 in base 10 -> " + sum_digits_base (254, 10).out + "%N")
-			print ("  254 in base 16 -> " + sum_digits_base (254, 16).out + " (FE in hex)%N")
-			print ("  254 in base 2 -> " + sum_digits_base (254, 2).out + " (11111110 in binary)%N")
+			demo (1)
+			demo (12345)
+			demo (123045)
+			demo (999)
+			demo (0)
+		end
+
+feature -- Demo
+
+	demo (n: INTEGER)
+		do
+			print ("sum_digits(" + n.out + ") = " + sum_digits (n).out + "%N")
 		end
 
 feature -- Calculation
 
 	sum_digits (n: INTEGER): INTEGER
-			-- Sum of digits of n in base 10.
+			-- Sum of decimal digits.
+		local
+			num: INTEGER
 		do
-			Result := sum_digits_base (n, 10)
+			num := n.abs
+			from until num = 0 loop
+				Result := Result + (num \\ 10)
+				num := num // 10
+			end
+		ensure
+			non_negative: Result >= 0
 		end
 
 	sum_digits_base (n, base: INTEGER): INTEGER
-			-- Sum of digits of n in given base.
+			-- Sum of digits in given base.
 		require
-			non_negative: n >= 0
 			valid_base: base >= 2
 		local
-			remaining: INTEGER
+			num: INTEGER
 		do
-			from remaining := n until remaining = 0 loop
-				Result := Result + (remaining \\ base)
-				remaining := remaining // base
+			num := n.abs
+			from until num = 0 loop
+				Result := Result + (num \\ base)
+				num := num // base
 			end
+		ensure
+			non_negative: Result >= 0
 		end
 
 end

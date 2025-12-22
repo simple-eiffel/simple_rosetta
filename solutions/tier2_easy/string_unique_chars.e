@@ -33,11 +33,11 @@ feature -- Analysis
 	test_string (a_str: STRING)
 			-- Test and report if string has all unique characters.
 		local
-			l_result: TUPLE [unique: BOOLEAN; dup_char: CHARACTER; pos1, pos2: INTEGER]
+			l_result: TUPLE [is_unique: BOOLEAN; dup_char: CHARACTER; pos1: INTEGER; pos2: INTEGER]
 		do
 			l_result := check_unique (a_str)
 			print ("String: %"" + a_str + "%" (length " + a_str.count.out + ")%N")
-			if l_result.unique then
+			if l_result.is_unique then
 				print ("  All characters are unique%N")
 			else
 				print ("  Duplicate '" + l_result.dup_char.out + "' at positions " + l_result.pos1.out + " and " + l_result.pos2.out + "%N")
@@ -45,7 +45,7 @@ feature -- Analysis
 			print ("%N")
 		end
 
-	check_unique (a_str: STRING): TUPLE [unique: BOOLEAN; dup_char: CHARACTER; pos1, pos2: INTEGER]
+	check_unique (a_str: STRING): TUPLE [is_unique: BOOLEAN; dup_char: CHARACTER; pos1: INTEGER; pos2: INTEGER]
 			-- Check if all characters are unique.
 			-- Returns first duplicate character and its positions if not.
 		require
@@ -54,8 +54,8 @@ feature -- Analysis
 			l_i, l_j: INTEGER
 		do
 			Result := [True, '%U', 0, 0]
-			from l_i := 1 until l_i >= a_str.count or not Result.unique loop
-				from l_j := l_i + 1 until l_j > a_str.count or not Result.unique loop
+			from l_i := 1 until l_i >= a_str.count or not Result.is_unique loop
+				from l_j := l_i + 1 until l_j > a_str.count or not Result.is_unique loop
 					if a_str [l_i] = a_str [l_j] then
 						Result := [False, a_str [l_i], l_i, l_j]
 					end

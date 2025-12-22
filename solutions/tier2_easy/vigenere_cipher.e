@@ -56,8 +56,8 @@ feature -- Operations
 			from l_i := 1 until l_i > a_plain.count loop
 				l_p := a_plain [l_i].as_upper.code - ('A').code
 				l_k := a_key [l_j].as_upper.code - ('A').code
-				Result.append_character (((l_p + l_k) \ 26 + ('A').code).to_character_8)
-				l_j := l_j \ a_key.count + 1
+				Result.append_character (((l_p + l_k) \\ 26 + ('A').code).to_character_8)
+				l_j := l_j \\ a_key.count + 1
 				l_i := l_i + 1
 			end
 		ensure
@@ -80,8 +80,8 @@ feature -- Operations
 			from l_i := 1 until l_i > a_cipher.count loop
 				l_c := a_cipher [l_i].as_upper.code - ('A').code
 				l_k := a_key [l_j].as_upper.code - ('A').code
-				Result.append_character ((((l_c - l_k) + 26) \ 26 + ('A').code).to_character_8)
-				l_j := l_j \ a_key.count + 1
+				Result.append_character ((((l_c - l_k) + 26) \\ 26 + ('A').code).to_character_8)
+				l_j := l_j \\ a_key.count + 1
 				l_i := l_i + 1
 			end
 		ensure

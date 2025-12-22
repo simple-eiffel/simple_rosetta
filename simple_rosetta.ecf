@@ -17,13 +17,14 @@
 			<void_safety support="all"/>
 		</capability>
 		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
+		<library name="simple_cache" location="$SIMPLE_EIFFEL\simple_cache\simple_cache.ecf"/>
 		<library name="simple_datetime" location="$SIMPLE_EIFFEL\simple_datetime\simple_datetime.ecf"/>
 		<library name="simple_json" location="$SIMPLE_EIFFEL\simple_json\simple_json.ecf"/>
-		<library name="simple_sql" location="$SIMPLE_EIFFEL\simple_sql\simple_sql.ecf"/>
-		<library name="simple_regex" location="$SIMPLE_EIFFEL\simple_regex\simple_regex.ecf"/>
 		<library name="simple_logger" location="$SIMPLE_EIFFEL\simple_logger\simple_logger.ecf"/>
-		<library name="simple_cache" location="$SIMPLE_EIFFEL\simple_cache\simple_cache.ecf"/>
 		<library name="simple_process" location="$SIMPLE_EIFFEL\simple_process\simple_process.ecf"/>
+		<library name="simple_regex" location="$SIMPLE_EIFFEL\simple_regex\simple_regex.ecf"/>
+		<library name="simple_sql" location="$SIMPLE_EIFFEL\simple_sql\simple_sql.ecf"/>
+		<library name="time" location="$ISE_LIBRARY\library\time\time.ecf"/>
 		<cluster name="src" location=".\src\" recursive="true"/>
 	</target>
 	<target name="simple_rosetta_tests" extends="simple_rosetta">
@@ -32,8 +33,8 @@
 			<exclude>/EIFGENs$</exclude>
 			<exclude>/\.git$</exclude>
 		</file_rule>
-		<library name="testing" location="$ISE_LIBRARY\library\testing\testing.ecf"/>
 		<library name="simple_testing" location="$SIMPLE_EIFFEL\simple_testing\simple_testing.ecf"/>
+		<library name="testing" location="$ISE_LIBRARY\library\testing\testing.ecf"/>
 		<cluster name="test_classes" location=".\testing\" recursive="true"/>
 	</target>
 	<target name="simple_rosetta_live" extends="simple_rosetta">

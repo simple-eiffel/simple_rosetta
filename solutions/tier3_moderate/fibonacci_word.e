@@ -65,7 +65,7 @@ feature -- Calculation
 			l_p0, l_p1: REAL_64
 			l_log2: REAL_64
 		do
-			l_log2 := {MATH_CONST}.log_2
+			l_log2 := {DOUBLE_MATH}.log (2.0)
 
 			across a_str as l_c loop
 				if l_c = '0' then

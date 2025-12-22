@@ -176,4 +176,9 @@ feature {NONE} -- Tier 4 Validation
 			print ("  - breadth_first_search.e%N")
 		end
 
+feature {NONE} -- Registry
+
+	registry: detachable SOLUTION_REGISTRY
+			-- Finish bringing everything in-system.
+
 end

@@ -25,9 +25,9 @@ feature {NONE} -- Initialization
 			print ("========================%N%N")
 
 			print ("Integer formatting:%N")
-			print ("  pad_left(42, 6): '" + pad_left (42.out, 6, ' ') + "'%N")
-			print ("  pad_left(42, 6, '0'): '" + pad_left (42.out, 6, '0') + "'%N")
-			print ("  pad_right(42, 6): '" + pad_right (42.out, 6, ' ') + "'%N")
+			print ("  pad_left(42, 6): [" + pad_left ((42).out, 6, ' ') + "]%N")
+			print ("  pad_left(42, 6, '0'): [" + pad_left ((42).out, 6, '0') + "]%N")
+			print ("  pad_right(42, 6): [" + pad_right ((42).out, 6, ' ') + "]%N")
 
 			print ("%NReal formatting:%N")
 			print ("  7.125: " + format_real (7.125, 2) + "%N")

@@ -73,7 +73,7 @@ feature -- Justification
 			-- Last line (left-aligned)
 			if not l_line.is_empty then
 				across l_line as l_lw loop
-					if l_lw.cursor_index > 1 then
+					if @l_lw.cursor_index > 1 then
 						Result.append_character (' ')
 					end
 					Result.append (l_lw)
@@ -101,7 +101,7 @@ feature {NONE} -- Helpers
 				l_gaps := a_words.count - 1
 				l_extra := a_width - l_text_len
 				l_base := l_extra // l_gaps
-				l_extra := l_extra \ l_gaps
+				l_extra := l_extra \\ l_gaps
 
 				l_i := 0
 				across a_words as l_w loop

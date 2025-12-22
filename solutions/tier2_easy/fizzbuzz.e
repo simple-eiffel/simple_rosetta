@@ -22,16 +22,16 @@ feature {NONE} -- Initialization
 			i: INTEGER
 		do
 			from i := 1 until i > 100 loop
-				if i \ 15 = 0 then
+				if i \\ 15 = 0 then
 					print ("FizzBuzz")
-				elseif i \ 3 = 0 then
+				elseif i \\ 3 = 0 then
 					print ("Fizz")
-				elseif i \ 5 = 0 then
+				elseif i \\ 5 = 0 then
 					print ("Buzz")
 				else
 					print (i.out)
 				end
-				if i \ 10 = 0 then
+				if i \\ 10 = 0 then
 					print ("%N")
 				else
 					print (" ")

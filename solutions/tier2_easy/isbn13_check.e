@@ -64,14 +64,14 @@ feature -- Operations
 			l_clean := clean_isbn (a_isbn)
 			from l_i := 1 until l_i > 13 loop
 				l_digit := (l_clean [l_i].code - ('0').code)
-				if l_i \ 2 = 0 then
+				if l_i \\ 2 = 0 then
 					l_sum := l_sum + l_digit * 3
 				else
 					l_sum := l_sum + l_digit
 				end
 				l_i := l_i + 1
 			end
-			Result := l_sum \ 10 = 0
+			Result := l_sum \\ 10 = 0
 		end
 
 	calculate_check_digit (a_isbn12: STRING): INTEGER
@@ -87,19 +87,19 @@ feature -- Operations
 			l_clean := clean_isbn (a_isbn12)
 			from l_i := 1 until l_i > 12 loop
 				l_digit := (l_clean [l_i].code - ('0').code)
-				if l_i \ 2 = 0 then
+				if l_i \\ 2 = 0 then
 					l_sum := l_sum + l_digit * 3
 				else
 					l_sum := l_sum + l_digit
 				end
 				l_i := l_i + 1
 			end
-			Result := (10 - (l_sum \ 10)) \ 10
+			Result := (10 - (l_sum \\ 10)) \\ 10
 		ensure
 			valid_digit: Result >= 0 and Result <= 9
 		end
 
-feature {NONE} -- Helpers
+feature -- Helpers
 
 	clean_isbn (a_isbn: STRING): STRING
 			-- Remove hyphens and spaces.

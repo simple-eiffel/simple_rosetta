@@ -34,7 +34,7 @@ feature {NONE} -- Initialization
 
 			l_tokens := tokenize (l_str, ',')
 			across l_tokens as l_t loop
-				print ("  [" + l_t.cursor_index.out + "] '" + l_t + "'%N")
+				print ("  [" + @l_t.cursor_index.out + "] '" + l_t + "'%N")
 			end
 
 			print ("%NJoined with '.': '" + join (l_tokens, ".") + "'%N")

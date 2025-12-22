@@ -40,7 +40,7 @@ feature -- Demo
 			l_parts := split_on_change (a_str)
 			print ("'" + a_str + "' -> ")
 			across l_parts as l_p loop
-				if l_p.cursor_index > 1 then
+				if @l_p.cursor_index > 1 then
 					print (", ")
 				end
 				print ("'" + l_p + "'")

@@ -62,7 +62,7 @@ feature -- Testing
 				print ("*ambiguous* (")
 				across l_matches as l_m loop
 					print (l_m)
-					if not l_m.is_last then
+					if not @l_m.is_last then
 						print (", ")
 					end
 				end

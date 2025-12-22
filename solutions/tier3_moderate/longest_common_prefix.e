@@ -40,7 +40,7 @@ feature -- Demo
 		do
 			print ("Input: [")
 			across a_strings as l_s loop
-				if l_s.cursor_index > 1 then
+				if @l_s.cursor_index > 1 then
 					print (", ")
 				end
 				print ("%"" + l_s + "%"")

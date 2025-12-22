@@ -56,11 +56,11 @@ feature -- Operations
 				l_c := a_text [l_i]
 				if l_c >= 'A' and l_c <= 'Z' then
 					l_base := ('A').code
-					l_code := (l_c.code - l_base + 13) \ 26 + l_base
+					l_code := (l_c.code - l_base + 13) \\ 26 + l_base
 					Result.append_character (l_code.to_character_8)
 				elseif l_c >= 'a' and l_c <= 'z' then
 					l_base := ('a').code
-					l_code := (l_c.code - l_base + 13) \ 26 + l_base
+					l_code := (l_c.code - l_base + 13) \\ 26 + l_base
 					Result.append_character (l_code.to_character_8)
 				else
 					Result.append_character (l_c)

@@ -43,7 +43,7 @@ feature {NONE} -- Initialization
 			file.close
 			print ("Created file: docs/readme.txt%N")
 
-			-- Create file in root (Unix) or C:\ (Windows)
+			-- Create file in root (Unix) or C:\\ (Windows)
 			-- Note: May require elevated privileges
 			print ("%NNote: Creating files in root requires appropriate permissions%N")
 		end

@@ -28,7 +28,7 @@ feature {NONE} -- Initialization
 			print ("  %%N - Newline%N")
 			print ("  %%T - Tab:%TLike this%N")
 			print ("  %%%% - Percent sign: %%%N")
-			print ("  %%%" + "%"" + " - Double quote%N")
+			print ("  %%%" - Double quote: %"%N")
 			print ("  %%' - Single quote: '%'%N")
 			print ("  %%R - Carriage return%N")
 			print ("  %%B - Backspace%N")

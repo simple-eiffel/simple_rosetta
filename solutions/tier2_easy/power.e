@@ -2,12 +2,13 @@ note
 	description: "[
 		Rosetta Code: Exponentiation operator
 		https://rosettacode.org/wiki/Exponentiation_operator
-		
-		Implement integer exponentiation.
+
+		Calculate power of a number.
 	]"
 	author: "Simple Eiffel"
-	see_also: "https://github.com/simple-eiffel - Modern Eiffel libraries"
+	see_also: "https://github.com/simple-eiffel"
 	rosetta_task: "Exponentiation_operator"
+	tier: "2"
 
 class
 	POWER
@@ -18,17 +19,47 @@ create
 feature {NONE} -- Initialization
 
 	make
+			-- Demonstrate exponentiation.
 		do
-			print ("2^10 = " + power (2, 10).out + "%N")
-			print ("3^5 = " + power (3, 5).out + "%N")
-			print ("5^0 = " + power (5, 0).out + "%N")
-			print ("7^1 = " + power (7, 1).out + "%N")
+			print ("Exponentiation%N")
+			print ("==============%N%N")
+
+			demo (2, 10)
+			demo (3, 4)
+			demo (5, 3)
+			demo (10, 0)
+			demo (2, -3)
 		end
 
-feature -- Computation
+feature -- Demo
 
-	power (base, exp: INTEGER): INTEGER_64
-			-- Return `base' raised to the power of `exp'.
+	demo (base, exp: INTEGER)
+		do
+			print (base.out + "^" + exp.out + " = " + power (base, exp).out + "%N")
+		end
+
+feature -- Calculation
+
+	power (base, exp: INTEGER): REAL_64
+			-- base raised to exp.
+		local
+			i: INTEGER
+		do
+			if exp = 0 then
+				Result := 1.0
+			elseif exp > 0 then
+				Result := 1.0
+				from i := 1 until i > exp loop
+					Result := Result * base
+					i := i + 1
+				end
+			else
+				Result := 1.0 / power (base, -exp)
+			end
+		end
+
+	power_int (base, exp: INTEGER): INTEGER_64
+			-- Integer power (for non-negative exp).
 		require
 			non_negative_exp: exp >= 0
 		local
@@ -40,8 +71,8 @@ feature -- Computation
 				i := i + 1
 			end
 		ensure
-			zero_exp: exp = 0 implies Result = 1
-			one_exp: exp = 1 implies Result = base
+			base_zero_is_zero: base = 0 and exp > 0 implies Result = 0
+			exp_zero_is_one: exp = 0 implies Result = 1
 		end
 
 end

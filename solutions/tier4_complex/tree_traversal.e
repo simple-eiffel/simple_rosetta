@@ -28,7 +28,7 @@ feature {NONE} -- Initialization
 			--        1
 			--       / \
 			--      2   3
-			--     / \   \
+			--     / \\   \
 			--    4   5   6
 			--       /
 			--      7
@@ -48,7 +48,7 @@ feature {NONE} -- Initialization
 			print ("        1%N")
 			print ("       / \%N")
 			print ("      2   3%N")
-			print ("     / \   \%N")
+			print ("     / \\   \%N")
 			print ("    4   5   6%N")
 			print ("       /%N")
 			print ("      7%N%N")
