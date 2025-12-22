@@ -52,4 +52,13 @@
 		</file_rule>
 		<cluster name="report" location=".\testing\" recursive="true"/>
 	</target>
+	<target name="simple_rosetta_solutions" extends="simple_rosetta">
+		<root class="SOLUTIONS_VALIDATOR" feature="make"/>
+		<file_rule>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/\.git$</exclude>
+		</file_rule>
+		<library name="simple_file" location="$SIMPLE_EIFFEL\simple_file\simple_file.ecf"/>
+		<cluster name="solutions" location=".\solutions\" recursive="true"/>
+	</target>
 </system>
