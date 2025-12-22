@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture - simple_rosetta</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/simple-eiffel/claude_eiffel_op_docs/main/artwork/LOGO.png" alt="simple_* logo" class="logo">
+        </div>
+        <h1>simple_rosetta</h1>
+        <p class="tagline">Architecture</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="user-guide.html">User Guide</a></li>
+            <li><a href="api-reference.html">API Reference</a></li>
+            <li><a href="architecture.html" class="active">Architecture</a></li>
+            <li><a href="cookbook.html">Cookbook</a></li>
+            <li><a href="https://github.com/simple-eiffel/simple_rosetta">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="overview">
+            <h2>System Overview</h2>
+            <p>simple_rosetta follows a layered architecture with clear separation of concerns:</p>
+
+<pre><code>┌─────────────────────────────────────────┐
+│           CLI (rosetta.exe)             │
+├─────────────────────────────────────────┤
+│         SIMPLE_ROSETTA (Facade)         │
+├─────────────────────────────────────────┤
+│  SOLUTION_STORE  │  SOLUTIONS_VALIDATOR │
+├─────────────────────────────────────────┤
+│           simple_sql (SQLite)           │
+└─────────────────────────────────────────┘</code></pre>
+        </section>
+
+        <section id="components">
+            <h2>Core Components</h2>
+
+            <h3>SIMPLE_ROSETTA (Facade)</h3>
+            <p>The main entry point providing a simplified API for all operations. Delegates to specialized components.</p>
+            <ul>
+                <li>Coordinates between storage and validation</li>
+                <li>Provides high-level search and query methods</li>
+                <li>Manages database lifecycle</li>
+            </ul>
+
+            <h3>SOLUTION_STORE</h3>
+            <p>SQLite-backed storage for solution metadata and code.</p>
+            <ul>
+                <li>Uses simple_sql for database operations</li>
+                <li>Parameterized queries prevent SQL injection</li>
+                <li>Schema auto-created on first use</li>
+            </ul>
+
+            <h3>SOLUTIONS_VALIDATOR</h3>
+            <p>Parses .e files and extracts metadata for import.</p>
+            <ul>
+                <li>Reads note clauses for task name, tier, description</li>
+                <li>Extracts class name from source</li>
+                <li>Reports parsing errors</li>
+            </ul>
+        </section>
+
+        <section id="database">
+            <h2>Database Schema</h2>
+
+<pre><code>CREATE TABLE solutions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_name TEXT NOT NULL UNIQUE,
+    tier INTEGER NOT NULL,
+    class_name TEXT NOT NULL,
+    file_name TEXT NOT NULL,
+    source_code TEXT NOT NULL,
+    description TEXT,
+    rosetta_url TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+
+            <h3>Tier Values</h3>
+            <table>
+                <tr><th>Value</th><th>Meaning</th></tr>
+                <tr><td>1</td><td>Trivial - Hello World level</td></tr>
+                <tr><td>2</td><td>Easy - FizzBuzz level</td></tr>
+                <tr><td>3</td><td>Moderate - Sorting algorithms</td></tr>
+                <tr><td>4</td><td>Complex - Graph algorithms, advanced DbC</td></tr>
+            </table>
+        </section>
+
+        <section id="solution-format">
+            <h2>Solution File Format</h2>
+            <p>Each solution is an Eiffel class with standardized note clauses:</p>
+
+<pre><code>note
+    description: "[
+        Rosetta Code: Task Name
+        https://rosettacode.org/wiki/Task_Name
+
+        Brief description of the solution.
+    ]"
+    author: "Simple Eiffel"
+    see_also: "https://github.com/simple-eiffel"
+    rosetta_task: "Task_Name"
+    tier: "2"
+
+class
+    TASK_NAME
+
+create
+    make
+
+feature {NONE} -- Initialization
+
+    make
+        do
+            -- Implementation
+        end
+
+end</code></pre>
+
+            <h3>Required Note Clauses</h3>
+            <ul>
+                <li><code>rosetta_task</code> - Exact Rosetta Code task name</li>
+                <li><code>tier</code> - Difficulty tier (1-4)</li>
+                <li><code>description</code> - Task description and URL</li>
+            </ul>
+        </section>
+
+        <section id="directory">
+            <h2>Directory Structure</h2>
+
+<pre><code>simple_rosetta/
+├── src/
+│   ├── facade/
+│   │   └── simple_rosetta.e
+│   └── storage/
+│       ├── solution_store.e
+│       └── task_store.e
+├── solutions/
+│   ├── tier1_trivial/
+│   ├── tier2_easy/
+│   ├── tier3_moderate/
+│   └── tier4_complex/
+├── testing/
+│   └── lib_tests.e
+├── docs/
+│   ├── index.html
+│   ├── user-guide.html
+│   ├── api-reference.html
+│   ├── architecture.html
+│   └── cookbook.html
+└── simple_rosetta.ecf</code></pre>
+        </section>
+
+        <section id="dependencies">
+            <h2>Dependencies</h2>
+            <ul>
+                <li><strong>simple_sql</strong> - SQLite database access</li>
+                <li><strong>simple_json</strong> - JSON parsing (for API responses)</li>
+                <li><strong>simple_regex</strong> - Pattern matching for parsing</li>
+                <li><strong>simple_logger</strong> - Logging</li>
+                <li><strong>simple_cache</strong> - Response caching</li>
+                <li><strong>simple_process</strong> - Process execution for CLI</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>Part of the <a href="https://github.com/simple-eiffel">simple_*</a> ecosystem.</p>
+        <p>&copy; 2025 simple_* ecosystem. MIT License.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Guide - simple_rosetta</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/simple-eiffel/claude_eiffel_op_docs/main/artwork/LOGO.png" alt="simple_* logo" class="logo">
+        </div>
+        <h1>simple_rosetta</h1>
+        <p class="tagline">User Guide</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="user-guide.html" class="active">User Guide</a></li>
+            <li><a href="api-reference.html">API Reference</a></li>
+            <li><a href="architecture.html">Architecture</a></li>
+            <li><a href="cookbook.html">Cookbook</a></li>
+            <li><a href="https://github.com/simple-eiffel/simple_rosetta">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="getting-started">
+            <h2>Getting Started</h2>
+
+            <h3>Installation</h3>
+            <ol>
+                <li>Set the environment variable:
+<pre><code>export SIMPLE_EIFFEL=/path/to/simple_eiffel_root</code></pre>
+                </li>
+                <li>Add to your ECF file:
+<pre><code>&lt;library name="simple_rosetta" location="$SIMPLE_EIFFEL/simple_rosetta/simple_rosetta.ecf"/&gt;</code></pre>
+                </li>
+            </ol>
+
+            <h3>Your First Query</h3>
+<pre><code><span class="keyword">class</span>
+    <span class="type">MY_APP</span>
+
+<span class="keyword">feature</span>
+    rosetta: <span class="type">SIMPLE_ROSETTA</span>
+        <span class="keyword">once</span>
+            <span class="keyword">create</span> Result.make
+        <span class="keyword">end</span>
+
+    demo
+        <span class="keyword">local</span>
+            l_results: <span class="type">ARRAYED_LIST</span> [<span class="type">TUPLE</span> [task: <span class="type">STRING</span>; tier: <span class="type">INTEGER</span>; class_name: <span class="type">STRING</span>]]
+        <span class="keyword">do</span>
+            <span class="comment">-- Search for sorting solutions</span>
+            l_results := rosetta.search_solutions (<span class="string">"sort"</span>)
+            <span class="keyword">across</span> l_results <span class="keyword">as</span> r <span class="keyword">loop</span>
+                print (r.task + <span class="string">" (Tier "</span> + r.tier.out + <span class="string">")%N"</span>)
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+        </section>
+
+        <section id="solution-tiers">
+            <h2>Understanding Solution Tiers</h2>
+            
+            <p>Solutions are organized by difficulty to help you find appropriate examples:</p>
+            
+            <table>
+                <tr>
+                    <th>Tier</th>
+                    <th>Difficulty</th>
+                    <th>Typical Tasks</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Trivial</td>
+                    <td>Hello World, Boolean values, Empty program, String operations</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Easy</td>
+                    <td>FizzBuzz, File I/O, Date formatting, Environment variables</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Moderate</td>
+                    <td>Sorting algorithms, Data structures, Date calculations</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Complex</td>
+                    <td>Graph algorithms, Recursive solutions, Advanced DbC</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="searching">
+            <h2>Searching Solutions</h2>
+
+            <h3>By Keyword</h3>
+<pre><code><span class="keyword">local</span>
+    l_results: <span class="type">ARRAYED_LIST</span> [<span class="type">TUPLE</span> [task: <span class="type">STRING</span>; tier: <span class="type">INTEGER</span>; class_name: <span class="type">STRING</span>]]
+<span class="keyword">do</span>
+    l_results := rosetta.search_solutions (<span class="string">"fibonacci"</span>)
+    <span class="keyword">across</span> l_results <span class="keyword">as</span> r <span class="keyword">loop</span>
+        print (r.task + <span class="string">"%N"</span>)
+    <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+
+            <h3>By Tier</h3>
+<pre><code><span class="keyword">local</span>
+    l_solutions: <span class="type">ARRAYED_LIST</span> [<span class="type">TUPLE</span> [task: <span class="type">STRING</span>; class_name: <span class="type">STRING</span>; file: <span class="type">STRING</span>]]
+<span class="keyword">do</span>
+    <span class="comment">-- Get all Tier 1 (trivial) solutions</span>
+    l_solutions := rosetta.solutions_by_tier (1)
+    print (<span class="string">"Found "</span> + l_solutions.count.out + <span class="string">" trivial solutions%N"</span>)
+<span class="keyword">end</span></code></pre>
+        </section>
+
+        <section id="wiki-format">
+            <h2>Generating Wiki Format</h2>
+
+            <p>Generate copy-paste-ready Rosetta Code wiki markup:</p>
+
+<pre><code><span class="keyword">if</span> <span class="keyword">attached</span> rosetta.solution_as_wiki (<span class="string">"Fibonacci_sequence"</span>) <span class="keyword">as</span> l_wiki <span class="keyword">then</span>
+    print (l_wiki)
+    <span class="comment">-- Output:</span>
+    <span class="comment">-- =={{header|Eiffel}}==</span>
+    <span class="comment">-- &lt;syntaxhighlight lang="eiffel"&gt;</span>
+    <span class="comment">-- ... solution code ...</span>
+    <span class="comment">-- &lt;/syntaxhighlight&gt;</span>
+<span class="keyword">end</span></code></pre>
+        </section>
+
+        <section id="cli">
+            <h2>Using the CLI</h2>
+
+            <h3>Search Solutions</h3>
+<pre><code>rosetta search sort
+rosetta search fibonacci</code></pre>
+
+            <h3>List by Tier</h3>
+<pre><code>rosetta list 1    # Trivial solutions
+rosetta list 4    # Complex solutions</code></pre>
+
+            <h3>Generate Wiki Format</h3>
+<pre><code>rosetta wiki Fibonacci_sequence</code></pre>
+
+            <h3>View Statistics</h3>
+<pre><code>rosetta stats</code></pre>
+        </section>
+
+        <section id="submitting">
+            <h2>Submitting to Rosetta Code</h2>
+
+            <ol>
+                <li>Find a task that needs an Eiffel solution</li>
+                <li>Generate the wiki format: <code>rosetta wiki Task_name</code></li>
+                <li>Go to the Rosetta Code wiki page</li>
+                <li>Click "Edit" and paste the generated markup</li>
+                <li>Preview and save your changes</li>
+            </ol>
+
+            <div class="highlight-box">
+                <h3>Submission Guidelines</h3>
+                <ul>
+                    <li>All solutions include the Simple Eiffel branding</li>
+                    <li>Solutions demonstrate proper Design by Contract</li>
+                    <li>Code follows Eiffel style conventions</li>
+                    <li>Solutions compile and run correctly</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Part of the <a href="https://github.com/simple-eiffel">simple_*</a> ecosystem.</p>
+        <p>&copy; 2025 simple_* ecosystem. MIT License.</p>
+    </footer>
+</body>
+</html>

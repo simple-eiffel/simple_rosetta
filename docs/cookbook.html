@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookbook - simple_rosetta</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/simple-eiffel/claude_eiffel_op_docs/main/artwork/LOGO.png" alt="simple_* logo" class="logo">
+        </div>
+        <h1>simple_rosetta</h1>
+        <p class="tagline">Cookbook</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="user-guide.html">User Guide</a></li>
+            <li><a href="api-reference.html">API Reference</a></li>
+            <li><a href="architecture.html">Architecture</a></li>
+            <li><a href="cookbook.html" class="active">Cookbook</a></li>
+            <li><a href="https://github.com/simple-eiffel/simple_rosetta">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="find-easy-tasks">
+            <h2>Find Easy Tasks to Submit</h2>
+            <p>Get started with Tier 1 (trivial) solutions:</p>
+
+<pre><code>local
+    l_rosetta: SIMPLE_ROSETTA
+    l_solutions: ARRAYED_LIST [TUPLE [task: STRING; class_name: STRING; file: STRING]]
+do
+    create l_rosetta.make
+    l_solutions := l_rosetta.solutions_by_tier (1)
+
+    print ("Trivial tasks ready for submission:%N")
+    across l_solutions as l_sol loop
+        print ("  - " + l_sol.task + "%N")
+    end
+end</code></pre>
+        </section>
+
+        <section id="generate-wiki">
+            <h2>Generate Wiki Submission</h2>
+            <p>Create copy-paste-ready wiki markup:</p>
+
+<pre><code>local
+    l_rosetta: SIMPLE_ROSETTA
+do
+    create l_rosetta.make
+
+    if attached l_rosetta.solution_as_wiki ("Hello_world/Text") as l_wiki then
+        print (l_wiki)
+        -- Copy this output directly to Rosetta Code wiki
+    else
+        print ("Solution not found%N")
+    end
+end</code></pre>
+        </section>
+
+        <section id="search-algorithms">
+            <h2>Find Algorithm Implementations</h2>
+            <p>Search for specific algorithm types:</p>
+
+<pre><code>local
+    l_rosetta: SIMPLE_ROSETTA
+    l_results: ARRAYED_LIST [TUPLE [task: STRING; tier: INTEGER; class_name: STRING]]
+do
+    create l_rosetta.make
+
+    -- Find all sorting algorithms
+    l_results := l_rosetta.search_solutions ("sort")
+
+    print ("Sorting algorithms:%N")
+    across l_results as l_r loop
+        print ("  " + l_r.task + " (Tier " + l_r.tier.out + ")%N")
+    end
+end</code></pre>
+        </section>
+
+        <section id="add-solution">
+            <h2>Add a New Solution</h2>
+            <p>Create a new solution file following the standard format:</p>
+
+<pre><code>note
+    description: "[
+        Rosetta Code: Your Task Name
+        https://rosettacode.org/wiki/Your_Task_Name
+
+        Description of what this task does.
+    ]"
+    author: "Your Name"
+    see_also: "https://github.com/simple-eiffel"
+    rosetta_task: "Your_Task_Name"
+    tier: "2"
+
+class
+    YOUR_TASK_NAME
+
+create
+    make
+
+feature {NONE} -- Initialization
+
+    make
+            -- Demonstrate the solution.
+        do
+            print ("Your solution output%N")
+        end
+
+end</code></pre>
+
+            <p>Save to the appropriate tier folder:</p>
+            <ul>
+                <li><code>solutions/tier1_trivial/</code> - Hello World level</li>
+                <li><code>solutions/tier2_easy/</code> - FizzBuzz level</li>
+                <li><code>solutions/tier3_moderate/</code> - Sorting algorithms</li>
+                <li><code>solutions/tier4_complex/</code> - Graph algorithms</li>
+            </ul>
+        </section>
+
+        <section id="import-solutions">
+            <h2>Import Solutions to Database</h2>
+            <p>After adding new solution files, import them:</p>
+
+<pre><code>local
+    l_store: SOLUTION_STORE
+    l_validator: SOLUTIONS_VALIDATOR
+do
+    create l_store.make ("rosetta.db")
+    create l_validator.make (l_store)
+
+    l_validator.import_solutions ("solutions/")
+
+    print ("Imported: " + l_validator.imported_count.out + "%N")
+    print ("Errors: " + l_validator.error_count.out + "%N")
+
+    l_store.close
+end</code></pre>
+        </section>
+
+        <section id="stats">
+            <h2>Get Database Statistics</h2>
+            <p>View solution counts by tier:</p>
+
+<pre><code>local
+    l_rosetta: SIMPLE_ROSETTA
+    l_summary: ARRAYED_LIST [TUPLE [tier: INTEGER; count: INTEGER]]
+do
+    create l_rosetta.make
+
+    print ("Total solutions: " + l_rosetta.solution_count.out + "%N%N")
+
+    l_summary := l_rosetta.tier_summary
+    across l_summary as l_s loop
+        print ("Tier " + l_s.tier.out + ": " + l_s.count.out + " solutions%N")
+    end
+end</code></pre>
+        </section>
+
+        <section id="cli-examples">
+            <h2>CLI Quick Reference</h2>
+
+<pre><code># Search for solutions
+rosetta search fibonacci
+rosetta search "binary search"
+
+# List by tier
+rosetta list 1    # Trivial
+rosetta list 2    # Easy
+rosetta list 3    # Moderate
+rosetta list 4    # Complex
+
+# Generate wiki format
+rosetta wiki Fibonacci_sequence
+rosetta wiki "Hello_world/Text"
+
+# Statistics
+rosetta stats
+
+# Validate all solutions compile
+rosetta validate</code></pre>
+        </section>
+    </main>
+
+    <footer>
+        <p>Part of the <a href="https://github.com/simple-eiffel">simple_*</a> ecosystem.</p>
+        <p>&copy; 2025 simple_* ecosystem. MIT License.</p>
+    </footer>
+</body>
+</html>

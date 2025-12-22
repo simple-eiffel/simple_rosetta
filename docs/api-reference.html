@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference - simple_rosetta</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/simple-eiffel/claude_eiffel_op_docs/main/artwork/LOGO.png" alt="simple_* logo" class="logo">
+        </div>
+        <h1>simple_rosetta</h1>
+        <p class="tagline">API Reference</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="user-guide.html">User Guide</a></li>
+            <li><a href="api-reference.html" class="active">API Reference</a></li>
+            <li><a href="architecture.html">Architecture</a></li>
+            <li><a href="cookbook.html">Cookbook</a></li>
+            <li><a href="https://github.com/simple-eiffel/simple_rosetta">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="simple-rosetta">
+            <h2>SIMPLE_ROSETTA</h2>
+            <p>Main facade class for Rosetta Code solution management.</p>
+
+            <h3>Creation</h3>
+            <table class="api-table">
+                <tr><th>Feature</th><th>Signature</th><th>Description</th></tr>
+                <tr><td><code>make</code></td><td><code></code></td><td>Create with default database path.</td></tr>
+                <tr><td><code>make_with_db</code></td><td><code>(a_path: STRING)</code></td><td>Create with custom database path.</td></tr>
+            </table>
+
+            <h3>Queries</h3>
+            <table class="api-table">
+                <tr><th>Feature</th><th>Signature</th><th>Description</th></tr>
+                <tr><td><code>search_solutions</code></td><td><code>(a_keyword: STRING): ARRAYED_LIST [TUPLE]</code></td><td>Search solutions by keyword.</td></tr>
+                <tr><td><code>solutions_by_tier</code></td><td><code>(a_tier: INTEGER): ARRAYED_LIST [TUPLE]</code></td><td>Get all solutions for tier (1-4).</td></tr>
+                <tr><td><code>get_solution_code</code></td><td><code>(a_task: STRING): detachable STRING</code></td><td>Get source code for task.</td></tr>
+                <tr><td><code>solution_count</code></td><td><code>: INTEGER</code></td><td>Total stored solutions.</td></tr>
+                <tr><td><code>tier_summary</code></td><td><code>: ARRAYED_LIST [TUPLE]</code></td><td>Count per tier.</td></tr>
+            </table>
+
+            <h3>Wiki Format</h3>
+            <table class="api-table">
+                <tr><th>Feature</th><th>Signature</th><th>Description</th></tr>
+                <tr><td><code>solution_as_wiki</code></td><td><code>(a_task: STRING): detachable STRING</code></td><td>Format for Rosetta Code wiki.</td></tr>
+            </table>
+
+            <h3>Storage</h3>
+            <table class="api-table">
+                <tr><th>Feature</th><th>Signature</th><th>Description</th></tr>
+                <tr><td><code>store_solution</code></td><td><code>(...)</code></td><td>Store a new solution.</td></tr>
+                <tr><td><code>close</code></td><td><code></code></td><td>Close database connection.</td></tr>
+                <tr><td><code>is_open</code></td><td><code>: BOOLEAN</code></td><td>Is connection open?</td></tr>
+            </table>
+        </section>
+
+        <section id="solution-store">
+            <h2>SOLUTION_STORE</h2>
+            <p>SQLite storage for Eiffel solutions.</p>
+
+            <h3>Features</h3>
+            <table class="api-table">
+                <tr><th>Feature</th><th>Signature</th><th>Description</th></tr>
+                <tr><td><code>make</code></td><td><code>(a_db_path: STRING)</code></td><td>Create store with database at path.</td></tr>
+                <tr><td><code>store_solution</code></td><td><code>(...)</code></td><td>Store solution with metadata.</td></tr>
+                <tr><td><code>solution_count</code></td><td><code>: INTEGER</code></td><td>Number of stored solutions.</td></tr>
+                <tr><td><code>solutions_by_tier</code></td><td><code>(a_tier: INTEGER): ARRAYED_LIST [TUPLE]</code></td><td>Solutions for tier.</td></tr>
+                <tr><td><code>get_solution_code</code></td><td><code>(a_task: STRING): detachable STRING</code></td><td>Get source code.</td></tr>
+                <tr><td><code>search_solutions</code></td><td><code>(a_keyword: STRING): ARRAYED_LIST [TUPLE]</code></td><td>Search by keyword.</td></tr>
+            </table>
+        </section>
+
+        <section id="solutions-validator">
+            <h2>SOLUTIONS_VALIDATOR</h2>
+            <p>Validates and imports solution files.</p>
+
+            <h3>Features</h3>
+            <table class="api-table">
+                <tr><th>Feature</th><th>Signature</th><th>Description</th></tr>
+                <tr><td><code>make</code></td><td><code>(a_store: SOLUTION_STORE)</code></td><td>Create with storage backend.</td></tr>
+                <tr><td><code>import_solutions</code></td><td><code>(a_path: STRING)</code></td><td>Import .e files recursively.</td></tr>
+                <tr><td><code>imported_count</code></td><td><code>: INTEGER</code></td><td>Solutions imported.</td></tr>
+                <tr><td><code>error_count</code></td><td><code>: INTEGER</code></td><td>Import errors.</td></tr>
+            </table>
+        </section>
+
+        <section id="contracts">
+            <h2>Contract Patterns</h2>
+            <p>All features follow Design by Contract:</p>
+<pre><code>search_solutions (a_keyword: STRING): ARRAYED_LIST [...]
+    require
+        valid_keyword: not a_keyword.is_empty
+    do
+        ...
+    ensure
+        result_attached: Result /= Void
+    end
+
+solutions_by_tier (a_tier: INTEGER): ARRAYED_LIST [...]
+    require
+        valid_tier: a_tier >= 1 and a_tier <= 4
+    do
+        ...
+    end</code></pre>
+        </section>
+    </main>
+
+    <footer>
+        <p>Part of the <a href="https://github.com/simple-eiffel">simple_*</a> ecosystem.</p>
+        <p>&copy; 2025 simple_* ecosystem. MIT License.</p>
+    </footer>
+</body>
+</html>
