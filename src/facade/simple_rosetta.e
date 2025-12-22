@@ -329,8 +329,5 @@ feature {NONE} -- Implementation
 	wiki_parser: WIKI_PARSER
 			-- Wiki markup parser
 
-invariant
-	store_attached: store /= Void
-	client_attached: client /= Void
 
 end

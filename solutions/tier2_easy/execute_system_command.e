@@ -4,6 +4,10 @@ note
 		https://rosettacode.org/wiki/Execute_a_system_command
 		
 		Execute an operating system command.
+
+		SECURITY WARNING: This is demo code only. Never pass untrusted
+		user input directly to shell commands. Use parameterized commands
+		or input validation to prevent command injection attacks.
 	]"
 	author: "Simple Eiffel"
 	see_also: "https://github.com/simple-eiffel - Modern Eiffel libraries"
