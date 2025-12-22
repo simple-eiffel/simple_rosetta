@@ -28,8 +28,12 @@ feature {NONE} -- Initialization
 			print ("==================================%N")
 			validate_tier3
 
+			print ("%NTIER 4 - Complex Solutions (12):%N")
+			print ("=================================%N")
+			validate_tier4
+
 			print ("%N=== Validation Complete ===%N")
-			print ("All 43 solutions compiled successfully!%N")
+			print ("All 55 solutions compiled successfully!%N")
 		end
 
 feature {NONE} -- Tier 1 Validation
@@ -137,6 +141,39 @@ feature {NONE} -- Tier 3 Validation
 			print ("  - leap_year.e%N")
 			print ("  - day_of_week.e%N")
 			print ("  - towers_of_hanoi.e%N")
+		end
+
+feature {NONE} -- Tier 4 Validation
+
+	validate_tier4
+		local
+			s01: FIBONACCI_SEQUENCE
+			s02: SIEVE_OF_ERATOSTHENES
+			s03: GCD
+			s04: QUICKSORT
+			s05: MERGESORT
+			s06: BINARY_SEARCH
+			s07: PALINDROME
+			s08: ANAGRAM
+			s09: FACTORIAL
+			s10: TREE_NODE
+			s11: TREE_TRAVERSAL
+			s12: DEPTH_FIRST_SEARCH
+			s13: BREADTH_FIRST_SEARCH
+		do
+			print ("  - fibonacci_sequence.e%N")
+			print ("  - sieve_of_eratosthenes.e%N")
+			print ("  - gcd.e%N")
+			print ("  - quicksort.e%N")
+			print ("  - mergesort.e%N")
+			print ("  - binary_search.e%N")
+			print ("  - palindrome.e%N")
+			print ("  - anagram.e%N")
+			print ("  - factorial.e%N")
+			print ("  - tree_node.e (helper)%N")
+			print ("  - tree_traversal.e%N")
+			print ("  - depth_first_search.e%N")
+			print ("  - breadth_first_search.e%N")
 		end
 
 end

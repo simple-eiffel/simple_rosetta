@@ -18,6 +18,7 @@ feature {NONE} -- Initialization
 			failed := 0
 
 			run_lib_tests
+			run_solution_db_tests
 
 			print ("%N========================%N")
 			print ("Results: " + passed.out + " passed, " + failed.out + " failed%N")
@@ -44,9 +45,18 @@ feature {NONE} -- Test Runners
 			run_test (agent lib_tests.test_simple_rosetta_facade, "test_simple_rosetta_facade")
 		end
 
+	run_solution_db_tests
+		do
+			create solution_db_tests
+			run_test (agent solution_db_tests.test_import_solutions, "test_import_solutions")
+			run_test (agent solution_db_tests.test_search_solutions, "test_search_solutions")
+			run_test (agent solution_db_tests.test_wiki_format, "test_wiki_format")
+		end
+
 feature {NONE} -- Implementation
 
 	lib_tests: LIB_TESTS
+	solution_db_tests: SOLUTION_DB_TEST
 
 	passed: INTEGER
 	failed: INTEGER
