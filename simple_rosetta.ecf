@@ -44,4 +44,12 @@
 		</file_rule>
 		<cluster name="live_test" location=".\testing\" recursive="true"/>
 	</target>
+	<target name="simple_rosetta_report" extends="simple_rosetta">
+		<root class="REPORT_GENERATOR" feature="make"/>
+		<file_rule>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/\.git$</exclude>
+		</file_rule>
+		<cluster name="report" location=".\testing\" recursive="true"/>
+	</target>
 </system>

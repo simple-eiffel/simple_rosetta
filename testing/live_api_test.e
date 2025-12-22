@@ -23,22 +23,32 @@ feature {NONE} -- Initialization
 feature -- Tests
 
 	test_eiffel_scan
-			-- Scan tasks to find Eiffel solutions.
+			-- Scan ALL tasks for Eiffel solutions and store in database.
 		local
+			rosetta: SIMPLE_ROSETTA
 			client: ROSETTA_CLIENT
 			parser: WIKI_PARSER
 			tasks: ARRAYED_LIST [ROSETTA_TASK]
+			task: ROSETTA_TASK
+			solution: ROSETTA_SOLUTION
 			content: detachable STRING
 			eiffel_code: detachable STRING
-			i, scan_limit, eiffel_found: INTEGER
-			with_eiffel, without_eiffel: ARRAYED_LIST [STRING]
+			i, eiffel_found: INTEGER
+			with_eiffel: ARRAYED_LIST [STRING]
+			file: RAW_FILE
 		do
-			print ("=== Eiffel Focus Scan ===%N%N")
+			print ("=== Full Eiffel Scan + Store ===%N%N")
 
+			-- Clean up old database
+			create file.make_with_name ("eiffel_scan.db")
+			if file.exists then
+				file.delete
+			end
+
+			create rosetta.make_with_db ("eiffel_scan.db")
 			create client.make
 			create parser
-			create with_eiffel.make (50)
-			create without_eiffel.make (100)
+			create with_eiffel.make (200)
 
 			-- Step 1: Get all task names
 			print ("Step 1: Fetching task list...%N")
@@ -49,32 +59,36 @@ feature -- Tests
 			else
 				print ("  Found " + tasks.count.out + " total tasks%N%N")
 
-				-- Step 2: Scan first N tasks for Eiffel
-				scan_limit := 50  -- Scan 50 tasks (~50 seconds with rate limiting)
-				print ("Step 2: Scanning first " + scan_limit.out + " tasks for Eiffel...%N")
+				-- Step 2: Scan ALL tasks for Eiffel
+				print ("Step 2: Scanning ALL " + tasks.count.out + " tasks for Eiffel...%N")
+				print ("  (This will take ~25 minutes due to rate limiting)%N%N")
 
-				from i := 1 until i > scan_limit.min (tasks.count) loop
-					print ("  [" + i.out + "/" + scan_limit.out + "] " + tasks.i_th (i).name)
+				from i := 1 until i > tasks.count loop
+					print ("  [" + i.out + "/" + tasks.count.out + "] " + tasks.i_th (i).name)
 
 					content := client.fetch_task_content (tasks.i_th (i).name)
 
 					if attached content as c and then not c.is_empty then
+						-- Create task record
+						create task.make (tasks.i_th (i).name)
+						task.set_description (parser.extract_description (c))
+
 						if parser.has_eiffel (c) then
 							with_eiffel.extend (tasks.i_th (i).name)
+							task.add_language ("Eiffel")
 							eiffel_found := eiffel_found + 1
-							print (" -> EIFFEL!%N")
+							print (" -> EIFFEL! (" + eiffel_found.out + " total)%N")
 
-							-- Extract and show first line of Eiffel code
+							-- Extract and store Eiffel code
 							eiffel_code := parser.extract_eiffel_solution (c)
 							if attached eiffel_code as ec and then not ec.is_empty then
-								print ("      Code: " + ec.substring (1, ec.count.min (50)) + "...%N")
+								-- Import full task to get solutions stored
+								rosetta.import_task (task.name)
 							end
 						else
-							without_eiffel.extend (tasks.i_th (i).name)
 							print ("%N")
 						end
 					else
-						without_eiffel.extend (tasks.i_th (i).name)
 						print (" (no content)%N")
 					end
 
@@ -82,23 +96,23 @@ feature -- Tests
 				end
 
 				-- Step 3: Report
-				print ("%N=== Eiffel Scan Results ===%N")
-				print ("Scanned: " + scan_limit.out + " tasks%N")
-				print ("With Eiffel: " + eiffel_found.out + " (" + ((eiffel_found * 100) // scan_limit).out + "%%)%N")
-				print ("Without Eiffel: " + without_eiffel.count.out + "%N%N")
+				print ("%N=== FULL EIFFEL SCAN RESULTS ===%N")
+				print ("Total tasks scanned: " + tasks.count.out + "%N")
+				print ("Tasks with Eiffel: " + eiffel_found.out + " (" + ((eiffel_found * 100) // tasks.count).out + "%%)%N")
+				print ("Tasks without Eiffel: " + (tasks.count - eiffel_found).out + "%N%N")
 
-				-- List tasks with Eiffel
-				if eiffel_found > 0 then
-					print ("Tasks with Eiffel solutions:%N")
-					from i := 1 until i > with_eiffel.count loop
-						print ("  " + i.out + ". " + with_eiffel.i_th (i) + "%N")
-						i := i + 1
-					end
+				-- List all tasks with Eiffel
+				print ("Complete list of tasks with Eiffel solutions:%N")
+				from i := 1 until i > with_eiffel.count loop
+					print ("  " + i.out + ". " + with_eiffel.i_th (i) + "%N")
+					i := i + 1
 				end
 
-				-- Estimate total
-				print ("%NEstimate: ~" + ((eiffel_found * tasks.count) // scan_limit).out + " tasks have Eiffel (of " + tasks.count.out + " total)%N")
+				-- Database stats
+				print ("%N" + rosetta.stats + "%N")
 			end
+
+			rosetta.close
 		end
 
 	test_fetch_task_list
