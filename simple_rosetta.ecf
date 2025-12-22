@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-23-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-23-0 http://www.eiffel.com/developers/xml/configuration-1-23-0.xsd" name="simple_rosetta" uuid="A1B2C3D4-E5F6-7890-ABCD-EF1234567890" library_target="simple_rosetta">
+	<description>Rosetta Code cross-language translation database for Eiffel</description>
+	<target name="simple_rosetta">
+		<root all_classes="true"/>
+		<file_rule>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/\.git$</exclude>
+			<exclude>/testing$</exclude>
+		</file_rule>
+		<option warning="warning">
+			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
+		</option>
+		<setting name="console_application" value="true"/>
+		<capability>
+			<concurrency support="scoop" use="thread"/>
+			<void_safety support="all"/>
+		</capability>
+		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
+		<library name="time" location="$ISE_LIBRARY\library\time\time.ecf"/>
+		<library name="simple_json" location="$SIMPLE_EIFFEL\simple_json\simple_json.ecf"/>
+		<library name="simple_sql" location="$SIMPLE_EIFFEL\simple_sql\simple_sql.ecf"/>
+		<library name="simple_regex" location="$SIMPLE_EIFFEL\simple_regex\simple_regex.ecf"/>
+		<library name="simple_logger" location="$SIMPLE_EIFFEL\simple_logger\simple_logger.ecf"/>
+		<library name="simple_cache" location="$SIMPLE_EIFFEL\simple_cache\simple_cache.ecf"/>
+		<library name="simple_process" location="$SIMPLE_EIFFEL\simple_process\simple_process.ecf"/>
+		<cluster name="src" location=".\src\" recursive="true"/>
+	</target>
+	<target name="simple_rosetta_tests" extends="simple_rosetta">
+		<root class="TEST_APP" feature="make"/>
+		<file_rule>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/\.git$</exclude>
+		</file_rule>
+		<library name="testing" location="$ISE_LIBRARY\library\testing\testing.ecf"/>
+		<library name="simple_testing" location="$SIMPLE_EIFFEL\simple_testing\simple_testing.ecf"/>
+		<cluster name="test_classes" location=".\testing\" recursive="true"/>
+	</target>
+	<target name="simple_rosetta_live" extends="simple_rosetta">
+		<root class="LIVE_API_TEST" feature="make"/>
+		<file_rule>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/\.git$</exclude>
+		</file_rule>
+		<cluster name="live_test" location=".\testing\" recursive="true"/>
+	</target>
+</system>

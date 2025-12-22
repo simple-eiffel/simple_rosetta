@@ -1,0 +1,9 @@
+# EiffelStudio generated
+EIFGENs/
+
+# Database files
+*.db
+
+# Test artifacts
+live_test.db
+test_rosetta.db
