@@ -53,7 +53,7 @@ feature -- Access
 	validation_log: STRING
 			-- Log of validation attempts (compile errors, contract violations)
 
-	created_at: DATE_TIME
+	created_at: SIMPLE_DATE_TIME
 			-- When solution was imported/generated
 
 feature -- Status

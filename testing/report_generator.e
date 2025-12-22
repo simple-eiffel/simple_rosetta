@@ -62,7 +62,7 @@ feature {NONE} -- Initialization
 				create file.make_create_read_write ("MISSING_EIFFEL_TASKS.md")
 
 				file.put_string ("# Rosetta Code Tasks Missing Eiffel Solutions%N%N")
-				file.put_string ("Generated: " + (create {DATE_TIME}.make_now).out + "%N%N")
+				file.put_string ("Generated: " + (create {SIMPLE_DATE_TIME}.make_now).out + "%N%N")
 				file.put_string ("## Summary%N%N")
 				file.put_string ("- **Total tasks on Rosetta Code:** " + all_tasks.count.out + "%N")
 				file.put_string ("- **Tasks with Eiffel:** " + eiffel_tasks.count.out + " (" + ((eiffel_tasks.count * 100) // all_tasks.count).out + "%%)%N")

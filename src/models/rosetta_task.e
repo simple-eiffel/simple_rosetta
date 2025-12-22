@@ -61,7 +61,7 @@ feature -- Access
 	languages: ARRAYED_LIST [STRING]
 			-- Languages with solutions for this task
 
-	created_at: DATE_TIME
+	created_at: SIMPLE_DATE_TIME
 			-- When task was imported
 
 feature -- Status

@@ -19,7 +19,7 @@ feature {NONE} -- Initialization
 	make
 			-- Display current system time.
 		local
-			dt: DATE_TIME
+			dt: SIMPLE_DATE_TIME
 			d: DATE
 			t: TIME
 		do

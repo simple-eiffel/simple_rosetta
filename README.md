@@ -69,12 +69,12 @@ rosetta validate
 
 1. Set environment variable:
 ```bash
-export SIMPLE_ROSETTA=/path/to/simple_rosetta
+export SIMPLE_EIFFEL=/path/to/simple_eiffel_root
 ```
 
 2. Add to ECF:
 ```xml
-<library name="simple_rosetta" location="$SIMPLE_ROSETTA/simple_rosetta.ecf"/>
+<library name="simple_rosetta" location="$SIMPLE_EIFFEL/simple_rosetta/simple_rosetta.ecf"/>
 ```
 
 ## Dependencies
