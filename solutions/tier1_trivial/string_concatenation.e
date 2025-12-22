@@ -3,10 +3,12 @@ note
 		Rosetta Code: String concatenation
 		https://rosettacode.org/wiki/String_concatenation
 
-		Demonstrate concatenation of two strings.
+		Concatenate two strings.
 	]"
-	author: "Eiffel Solution"
+	author: "Simple Eiffel"
+	see_also: "https://github.com/simple-eiffel"
 	rosetta_task: "String_concatenation"
+	tier: "1"
 
 class
 	STRING_CONCATENATION
@@ -19,27 +21,37 @@ feature {NONE} -- Initialization
 	make
 			-- Demonstrate string concatenation.
 		local
-			s1, s2, result_str: STRING
+			l_s1, l_s2, l_result: STRING
 		do
-			s1 := "Hello, "
-			s2 := "World!"
+			print ("String Concatenation%N")
+			print ("====================%N%N")
 
-			-- Method 1: + operator (creates new string)
-			result_str := s1 + s2
-			print ("Using + operator:%N")
-			print ("  %"Hello, %" + %"World!%" = %"" + result_str + "%"%N")
+			l_s1 := "Hello, "
+			l_s2 := "World!"
 
-			-- Method 2: append (modifies in place)
-			s1 := "Hello, "  -- Reset
-			s1.append (s2)
-			print ("%NUsing append (modifies s1):%N")
-			print ("  s1.append (s2) -> %"" + s1 + "%"%N")
+			-- Using + operator
+			l_result := l_s1 + l_s2
+			print ("Using '+': " + l_result + "%N")
 
-			-- Method 3: append_string (same as append)
-			s1 := "Hello, "  -- Reset
-			s1.append_string (s2)
-			print ("%NUsing append_string:%N")
-			print ("  s1.append_string (s2) -> %"" + s1 + "%"%N")
+			-- String literal concatenation
+			print ("Literal: " + "Hello, " + "World!" + "%N")
+
+			-- Multiple concatenations
+			print ("Chain: " + "A" + "B" + "C" + "D" + "%N")
+		end
+
+feature -- Operations
+
+	concat (a_first, a_second: STRING): STRING
+			-- Concatenate two strings.
+		require
+			first_exists: a_first /= Void
+			second_exists: a_second /= Void
+		do
+			Result := a_first + a_second
+		ensure
+			result_exists: Result /= Void
+			correct_length: Result.count = a_first.count + a_second.count
 		end
 
 end

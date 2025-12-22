@@ -3,10 +3,12 @@ note
 		Rosetta Code: Empty string
 		https://rosettacode.org/wiki/Empty_string
 
-		Demonstrate how to check whether a string is empty.
+		Demonstrate creation and detection of empty strings.
 	]"
-	author: "Eiffel Solution"
+	author: "Simple Eiffel"
+	see_also: "https://github.com/simple-eiffel"
 	rosetta_task: "Empty_string"
+	tier: "1"
 
 class
 	EMPTY_STRING
@@ -17,25 +19,51 @@ create
 feature {NONE} -- Initialization
 
 	make
-			-- Demonstrate empty string checks.
+			-- Demonstrate empty string operations.
 		local
-			s1, s2: STRING
+			l_empty, l_non_empty: STRING
 		do
-			-- Create an empty string
-			create s1.make_empty
+			print ("Empty String%N")
+			print ("============%N%N")
 
-			-- Create a non-empty string
-			s2 := "Hello"
+			-- Create empty string
+			create l_empty.make_empty
+			l_non_empty := "Hello"
 
-			-- Check if empty using is_empty
-			print ("Checking strings for emptiness:%N")
-			print ("  s1 (empty): is_empty = " + s1.is_empty.out + "%N")
-			print ("  s2 ('Hello'): is_empty = " + s2.is_empty.out + "%N")
+			print ("Empty string: '" + l_empty + "'%N")
+			print ("  is_empty: " + l_empty.is_empty.out + "%N")
+			print ("  count: " + l_empty.count.out + "%N%N")
 
-			-- Alternative: check count
-			print ("%NUsing count:%N")
-			print ("  s1.count = " + s1.count.out + "%N")
-			print ("  s2.count = " + s2.count.out + "%N")
+			print ("Non-empty string: '" + l_non_empty + "'%N")
+			print ("  is_empty: " + l_non_empty.is_empty.out + "%N")
+			print ("  count: " + l_non_empty.count.out + "%N%N")
+
+			-- Alternative empty string creation
+			l_empty := ""
+			print ("Literal empty string '': is_empty = " + l_empty.is_empty.out + "%N")
+		end
+
+feature -- Query
+
+	is_empty (a_str: STRING): BOOLEAN
+			-- Is `a_str' empty?
+		require
+			str_exists: a_str /= Void
+		do
+			Result := a_str.is_empty
+		end
+
+	is_blank (a_str: STRING): BOOLEAN
+			-- Is `a_str' empty or only whitespace?
+		require
+			str_exists: a_str /= Void
+		local
+			l_trimmed: STRING
+		do
+			l_trimmed := a_str.twin
+			l_trimmed.left_adjust
+			l_trimmed.right_adjust
+			Result := l_trimmed.is_empty
 		end
 
 end

@@ -3,10 +3,12 @@ note
 		Rosetta Code: String length
 		https://rosettacode.org/wiki/String_length
 
-		Determine the character and byte length of a string.
+		Determine the length of a string.
 	]"
-	author: "Eiffel Solution"
+	author: "Simple Eiffel"
+	see_also: "https://github.com/simple-eiffel"
 	rosetta_task: "String_length"
+	tier: "1"
 
 class
 	STRING_LENGTH
@@ -18,22 +20,45 @@ feature {NONE} -- Initialization
 
 	make
 			-- Demonstrate string length.
-		local
-			s: STRING
-			s32: STRING_32
 		do
-			-- ASCII string
-			s := "Hello, World!"
-			print ("String: %"" + s + "%"%N")
-			print ("  Character length: " + s.count.out + "%N")
+			print ("String Length%N")
+			print ("=============%N%N")
 
-			-- Unicode string (STRING_32)
-			s32 := {STRING_32} "Hello, 世界!"
-			print ("%NUnicode string: 'Hello, 世界!'%N")
-			print ("  Character length: " + s32.count.out + "%N")
+			show_length ("")
+			show_length ("a")
+			show_length ("Hello")
+			show_length ("Hello, World!")
+			show_length ("Eiffel programming language")
+		end
 
-			-- Note: In Eiffel, STRING is an alias for STRING_8
-			-- STRING_32 handles Unicode properly
+feature -- Display
+
+	show_length (a_str: STRING)
+			-- Print string and its length.
+		do
+			print ("'" + a_str + "' -> " + a_str.count.out + " characters%N")
+		end
+
+feature -- Query
+
+	length (a_str: STRING): INTEGER
+			-- Length of string.
+		require
+			str_exists: a_str /= Void
+		do
+			Result := a_str.count
+		ensure
+			non_negative: Result >= 0
+		end
+
+	byte_length (a_str: STRING): INTEGER
+			-- Byte length (same as character count for STRING_8).
+		require
+			str_exists: a_str /= Void
+		do
+			Result := a_str.count
+		ensure
+			non_negative: Result >= 0
 		end
 
 end

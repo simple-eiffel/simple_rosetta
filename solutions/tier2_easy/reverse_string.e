@@ -2,12 +2,13 @@ note
 	description: "[
 		Rosetta Code: Reverse a string
 		https://rosettacode.org/wiki/Reverse_a_string
-		
-		Reverse the characters in a string.
+
+		Reverse a string.
 	]"
 	author: "Simple Eiffel"
-	see_also: "https://github.com/simple-eiffel - Modern Eiffel libraries"
+	see_also: "https://github.com/simple-eiffel"
 	rosetta_task: "Reverse_a_string"
+	tier: "2"
 
 class
 	REVERSE_STRING
@@ -18,37 +19,46 @@ create
 feature {NONE} -- Initialization
 
 	make
-		local
-			s, reversed: STRING
+			-- Demonstrate string reversal.
 		do
-			s := "Hello, World!"
-			reversed := reverse (s)
-			print ("Original: " + s + "%N")
-			print ("Reversed: " + reversed + "%N%N")
-			
-			s := "racecar"
-			reversed := reverse (s)
-			print ("Original: " + s + "%N")
-			print ("Reversed: " + reversed + "%N")
-			print ("Is palindrome: " + s.same_string (reversed).out + "%N")
+			print ("Reverse a String%N")
+			print ("================%N%N")
+
+			demo ("Hello")
+			demo ("racecar")
+			demo ("A")
+			demo ("")
+			demo ("12345")
+		end
+
+feature -- Demo
+
+	demo (a_str: STRING)
+			-- Show reversal.
+		do
+			print ("'" + a_str + "' -> '" + reverse (a_str) + "'%N")
 		end
 
 feature -- Operations
 
-	reverse (s: STRING): STRING
-			-- Return reversed copy of `s'.
+	reverse (a_str: STRING): STRING
+			-- Return reversed copy of string.
 		require
-			s_not_void: s /= Void
-		local
-			i: INTEGER
+			str_exists: a_str /= Void
 		do
-			create Result.make (s.count)
-			from i := s.count until i < 1 loop
-				Result.append_character (s.item (i))
-				i := i - 1
-			end
+			Result := a_str.twin
+			Result.mirror
 		ensure
-			same_length: Result.count = s.count
+			result_exists: Result /= Void
+			same_length: Result.count = a_str.count
+		end
+
+	reverse_in_place (a_str: STRING)
+			-- Reverse string in place.
+		require
+			str_exists: a_str /= Void
+		do
+			a_str.mirror
 		end
 
 end
