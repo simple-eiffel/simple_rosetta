@@ -581,6 +581,43 @@ feature -- Tier 2: Easy Tests - String Manipulation
 			assert ("right pad", sol.right_pad ("hello", 10, ' ').same_string ("hello     "))
 		end
 
+	test_median
+			-- Test MEDIAN solution.
+		local
+			sol: MEDIAN
+		do
+			create sol.make
+			-- Odd count: median of [1,5,2,8,7] sorted is [1,2,5,7,8], median is 5
+			assert ("median odd count", sol.median (<<1.0, 5.0, 2.0, 8.0, 7.0>>) = 5.0)
+			-- Even count: median of [1,5,2,8,7,9] sorted is [1,2,5,7,8,9], median is (5+7)/2 = 6
+			assert ("median even count", sol.median (<<1.0, 5.0, 2.0, 8.0, 7.0, 9.0>>) = 6.0)
+		end
+
+	test_integer_square_root
+			-- Test INTEGER_SQUARE_ROOT solution.
+		local
+			sol: INTEGER_SQUARE_ROOT
+		do
+			create sol.make
+			assert ("isqrt(0)", sol.isqrt (0) = {INTEGER_64} 0)
+			assert ("isqrt(4)", sol.isqrt (4) = {INTEGER_64} 2)
+			assert ("isqrt(10)", sol.isqrt (10) = {INTEGER_64} 3)
+			assert ("isqrt(100)", sol.isqrt (100) = {INTEGER_64} 10)
+			assert ("isqrt(1000000)", sol.isqrt (1000000) = {INTEGER_64} 1000)
+		end
+
+	test_temperature_conversion
+			-- Test TEMPERATURE_CONVERSION solution.
+		local
+			sol: TEMPERATURE_CONVERSION
+		do
+			create sol.make
+			assert ("0C to F", sol.celsius_to_fahrenheit (0.0) = 32.0)
+			assert ("100C to F", (sol.celsius_to_fahrenheit (100.0) - 212.0).abs < 0.001)
+			assert ("32F to C", sol.fahrenheit_to_celsius (32.0) = 0.0)
+			assert ("212F to C", (sol.fahrenheit_to_celsius (212.0) - 100.0).abs < 0.001)
+		end
+
 feature -- Tier 3: Moderate Tests
 
 	test_towers_of_hanoi
@@ -724,7 +761,55 @@ feature -- Tier 3: Moderate Tests
 			assert ("AM = 5.5", am = 5.5)
 		end
 
+	test_insertion_sort
+			-- Test INSERTION_SORT solution.
+		local
+			sol: INSERTION_SORT
+			arr: ARRAY [INTEGER]
+		do
+			create sol.make
+			arr := <<64, 34, 25, 12, 22, 11, 90>>
+			sol.insertion_sort (arr)
+			assert ("sorted after insertion sort", sol.is_sorted (arr))
+			assert ("first is 11", arr [1] = 11)
+			assert ("last is 90", arr [7] = 90)
+		end
+
 feature -- Tier 4: Complex Tests
+
+	test_binary_search
+			-- Test BINARY_SEARCH solution.
+		local
+			sol: BINARY_SEARCH
+			arr: ARRAY [INTEGER]
+		do
+			create sol.make
+			arr := <<2, 5, 8, 12, 16, 23, 38, 56, 72, 91>>
+			assert ("find 23", sol.binary_search (arr, 23) = 6)
+			assert ("find 2 (first)", sol.binary_search (arr, 2) = 1)
+			assert ("find 91 (last)", sol.binary_search (arr, 91) = 10)
+			assert ("not found 50", sol.binary_search (arr, 50) = -1)
+			assert ("recursive find 38", sol.binary_search_recursive (arr, 38, 1, 10) = 7)
+		end
+
+	test_mergesort
+			-- Test MERGESORT solution.
+		local
+			sol: MERGESORT
+			arr: ARRAY [INTEGER]
+		do
+			create sol.make
+			arr := <<38, 27, 43, 3, 9, 82, 10>>
+			sol.merge_sort (arr)
+			-- Verify sorted: 3, 9, 10, 27, 38, 43, 82
+			assert ("first is 3", arr [1] = 3)
+			assert ("second is 9", arr [2] = 9)
+			assert ("third is 10", arr [3] = 10)
+			assert ("fourth is 27", arr [4] = 27)
+			assert ("fifth is 38", arr [5] = 38)
+			assert ("sixth is 43", arr [6] = 43)
+			assert ("last is 82", arr [7] = 82)
+		end
 
 	test_factorial
 			-- Test FACTORIAL solution.

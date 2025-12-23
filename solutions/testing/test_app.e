@@ -102,6 +102,9 @@ feature {NONE} -- Test Runners
 			run_test (agent lib_tests.test_sum_digits, "test_sum_digits")
 			run_test (agent lib_tests.test_lipogram, "test_lipogram")
 			run_test (agent lib_tests.test_left_pad, "test_left_pad")
+			run_test (agent lib_tests.test_median, "test_median")
+			run_test (agent lib_tests.test_integer_square_root, "test_integer_square_root")
+			run_test (agent lib_tests.test_temperature_conversion, "test_temperature_conversion")
 			print ("%N")
 		end
 
@@ -119,6 +122,7 @@ feature {NONE} -- Test Runners
 			run_test (agent lib_tests.test_hamming_distance, "test_hamming_distance")
 			run_test (agent lib_tests.test_rms, "test_rms")
 			run_test (agent lib_tests.test_pythagorean_means, "test_pythagorean_means")
+			run_test (agent lib_tests.test_insertion_sort, "test_insertion_sort")
 			print ("%N")
 		end
 
