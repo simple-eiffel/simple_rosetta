@@ -48,6 +48,13 @@ feature {NONE} -- Test Runners
 			print ("---------------%N")
 			run_test (agent lib_tests.test_absolute_value, "test_absolute_value")
 			run_test (agent lib_tests.test_even_or_odd, "test_even_or_odd")
+			run_test (agent lib_tests.test_array_first_last, "test_array_first_last")
+			run_test (agent lib_tests.test_is_string_numeric, "test_is_string_numeric")
+			run_test (agent lib_tests.test_string_length, "test_string_length")
+			run_test (agent lib_tests.test_increment, "test_increment")
+			run_test (agent lib_tests.test_string_append, "test_string_append")
+			run_test (agent lib_tests.test_string_concatenation, "test_string_concatenation")
+			run_test (agent lib_tests.test_empty_string, "test_empty_string")
 			print ("%N")
 		end
 
@@ -72,6 +79,29 @@ feature {NONE} -- Test Runners
 			run_test (agent lib_tests.test_stack_example, "test_stack_example")
 			run_test (agent lib_tests.test_queue_example, "test_queue_example")
 			run_test (agent lib_tests.test_priority_queue_example, "test_priority_queue_example")
+			-- Math/Statistics
+			run_test (agent lib_tests.test_arithmetic_mean, "test_arithmetic_mean")
+			run_test (agent lib_tests.test_maximum, "test_maximum")
+			run_test (agent lib_tests.test_minimum, "test_minimum")
+			run_test (agent lib_tests.test_sum_of_list, "test_sum_of_list")
+			-- String Analysis
+			run_test (agent lib_tests.test_pangram, "test_pangram")
+			run_test (agent lib_tests.test_isogram, "test_isogram")
+			run_test (agent lib_tests.test_is_palindrome, "test_is_palindrome")
+			run_test (agent lib_tests.test_anagram_detector, "test_anagram_detector")
+			-- String Manipulation
+			run_test (agent lib_tests.test_trim_string, "test_trim_string")
+			run_test (agent lib_tests.test_repeat_string, "test_repeat_string")
+			run_test (agent lib_tests.test_remove_vowels, "test_remove_vowels")
+			run_test (agent lib_tests.test_binary_digits, "test_binary_digits")
+			run_test (agent lib_tests.test_count_occurrences, "test_count_occurrences")
+			run_test (agent lib_tests.test_string_case, "test_string_case")
+			run_test (agent lib_tests.test_word_wrap, "test_word_wrap")
+			run_test (agent lib_tests.test_run_length_encoding, "test_run_length_encoding")
+			run_test (agent lib_tests.test_power, "test_power")
+			run_test (agent lib_tests.test_sum_digits, "test_sum_digits")
+			run_test (agent lib_tests.test_lipogram, "test_lipogram")
+			run_test (agent lib_tests.test_left_pad, "test_left_pad")
 			print ("%N")
 		end
 
@@ -85,6 +115,10 @@ feature {NONE} -- Test Runners
 			run_test (agent lib_tests.test_bell_numbers, "test_bell_numbers")
 			run_test (agent lib_tests.test_complex_arithmetic, "test_complex_arithmetic")
 			run_test (agent lib_tests.test_rational_arithmetic, "test_rational_arithmetic")
+			run_test (agent lib_tests.test_levenshtein_distance, "test_levenshtein_distance")
+			run_test (agent lib_tests.test_hamming_distance, "test_hamming_distance")
+			run_test (agent lib_tests.test_rms, "test_rms")
+			run_test (agent lib_tests.test_pythagorean_means, "test_pythagorean_means")
 			print ("%N")
 		end
 

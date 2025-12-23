@@ -48,6 +48,89 @@ feature -- Tier 1: Trivial Tests
 			assert ("-5 is odd", sol.is_odd (-5))
 		end
 
+	test_array_first_last
+			-- Test ARRAY_FIRST_LAST solution.
+		local
+			sol: ARRAY_FIRST_LAST
+			arr: ARRAY [INTEGER]
+		do
+			create sol
+			arr := <<10, 20, 30, 40, 50>>
+			assert ("first is 10", attached {INTEGER} sol.first (arr) as f and then f = 10)
+			assert ("last is 50", attached {INTEGER} sol.last (arr) as l and then l = 50)
+		end
+
+	test_is_string_numeric
+			-- Test IS_STRING_NUMERIC solution.
+		local
+			sol: IS_STRING_NUMERIC
+		do
+			create sol.make
+			assert ("42 is numeric", sol.is_numeric ("42"))
+			assert ("-17 is numeric", sol.is_numeric ("-17"))
+			assert ("3.14159 is numeric", sol.is_numeric ("3.14159"))
+			assert ("hello not numeric", not sol.is_numeric ("hello"))
+			assert ("empty not numeric", not sol.is_numeric (""))
+			assert ("  123  is numeric", sol.is_numeric ("  123  "))
+		end
+
+	test_string_length
+			-- Test STRING_LENGTH solution.
+		local
+			sol: STRING_LENGTH
+		do
+			create sol.make
+			assert ("empty string length", sol.length ("") = 0)
+			assert ("a length 1", sol.length ("a") = 1)
+			assert ("hello length 5", sol.length ("Hello") = 5)
+			assert ("byte length", sol.byte_length ("test") = 4)
+		end
+
+	test_increment
+			-- Test INCREMENT solution.
+		local
+			sol: INCREMENT
+		do
+			create sol.make
+			assert ("12345 increments to 12346", sol.increment_string ("12345").same_string ("12346"))
+			assert ("999 increments to 1000", sol.increment_string ("999").same_string ("1000"))
+			assert ("0 increments to 1", sol.increment_string ("0").same_string ("1"))
+		end
+
+	test_string_append
+			-- Test STRING_APPEND solution.
+		local
+			sol: STRING_APPEND
+		do
+			create sol.make
+			assert ("hello + world", sol.concatenate ("Hello", ", World!").same_string ("Hello, World!"))
+			assert ("empty + test", sol.concatenate ("", "test").same_string ("test"))
+			assert ("test + empty", sol.concatenate ("test", "").same_string ("test"))
+		end
+
+	test_string_concatenation
+			-- Test STRING_CONCATENATION solution.
+		local
+			sol: STRING_CONCATENATION
+		do
+			create sol.make
+			assert ("A + B", sol.concat ("A", "B").same_string ("AB"))
+			assert ("Hello + World", sol.concat ("Hello, ", "World!").same_string ("Hello, World!"))
+		end
+
+	test_empty_string
+			-- Test EMPTY_STRING solution.
+		local
+			sol: EMPTY_STRING
+		do
+			create sol.make
+			assert ("empty is empty", sol.is_empty (""))
+			assert ("hello not empty", not sol.is_empty ("Hello"))
+			assert ("blank is blank", sol.is_blank ("   "))
+			assert ("empty is blank", sol.is_blank (""))
+			assert ("hello not blank", not sol.is_blank ("Hello"))
+		end
+
 feature -- Tier 2: Easy Tests - String Operations
 
 	test_reverse_string
@@ -246,6 +329,258 @@ feature -- Tier 2: Easy Tests - Data Structures
 			assert ("pq is empty", pq.is_empty)
 		end
 
+feature -- Tier 2: Easy Tests - Math/Statistics
+
+	test_arithmetic_mean
+			-- Test ARITHMETIC_MEAN solution.
+		local
+			sol: ARITHMETIC_MEAN
+		do
+			create sol.make
+			assert ("mean of 1-10 is 5.5", sol.mean (<<1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0>>) = 5.5)
+			assert ("mean of empty is 0", sol.mean (<<>>) = 0.0)
+			assert ("mean of single is itself", sol.mean (<<7.0>>) = 7.0)
+		end
+
+	test_maximum
+			-- Test MAXIMUM solution.
+		local
+			sol: MAXIMUM
+		do
+			create sol.make
+			assert ("max of 3,1,4,1,5,9", sol.maximum (<<3, 1, 4, 1, 5, 9>>) = 9)
+			assert ("max of negatives", sol.maximum (<<-5, -3, -10, -1>>) = -1)
+			assert ("max of single", sol.maximum (<<42>>) = 42)
+		end
+
+	test_minimum
+			-- Test MINIMUM solution.
+		local
+			sol: MINIMUM
+		do
+			create sol.make
+			assert ("min of 3,1,4,1,5,9", sol.minimum (<<3, 1, 4, 1, 5, 9>>) = 1)
+			assert ("min of negatives", sol.minimum (<<-5, -3, -10, -1>>) = -10)
+			assert ("min of single", sol.minimum (<<42>>) = 42)
+		end
+
+	test_sum_of_list
+			-- Test SUM_OF_LIST solution.
+		local
+			sol: SUM_OF_LIST
+		do
+			create sol.make
+			assert ("sum of 1-10 is 55", sol.sum (<<1, 2, 3, 4, 5, 6, 7, 8, 9, 10>>) = {INTEGER_64} 55)
+			assert ("product of 1-5 is 120", sol.product (<<1, 2, 3, 4, 5>>) = {INTEGER_64} 120)
+			assert ("sum of empty is 0", sol.sum (<<>>) = {INTEGER_64} 0)
+		end
+
+feature -- Tier 2: Easy Tests - String Analysis
+
+	test_pangram
+			-- Test PANGRAM solution.
+		local
+			sol: PANGRAM
+		do
+			create sol.make
+			assert ("quick brown fox", sol.is_pangram ("The quick brown fox jumps over the lazy dog"))
+			assert ("pack my box", sol.is_pangram ("Pack my box with five dozen liquor jugs"))
+			assert ("hello world not pangram", not sol.is_pangram ("Hello World"))
+			assert ("missing letters", sol.missing_letters ("Hello").count > 0)
+		end
+
+	test_isogram
+			-- Test ISOGRAM solution.
+		local
+			sol: ISOGRAM
+		do
+			create sol.make
+			assert ("subdermatoglyphic is isogram", sol.is_isogram ("subdermatoglyphic"))
+			assert ("hello not isogram", not sol.is_isogram ("hello"))
+			assert ("empty is isogram", sol.is_isogram (""))
+			assert ("a is isogram", sol.is_isogram ("a"))
+			assert ("first duplicate in hello is l", sol.first_duplicate ("hello") = 'l')
+		end
+
+	test_is_palindrome
+			-- Test IS_PALINDROME solution.
+		local
+			sol: IS_PALINDROME
+		do
+			create sol.make
+			assert ("racecar palindrome", sol.is_palindrome ("racecar"))
+			assert ("level palindrome", sol.is_palindrome ("level"))
+			assert ("hello not palindrome", not sol.is_palindrome ("hello"))
+			assert ("panama with spaces", sol.is_palindrome ("A man a plan a canal Panama"))
+			assert ("exact: noon", sol.is_exact_palindrome ("noon"))
+			assert ("exact: hello no", not sol.is_exact_palindrome ("hello"))
+		end
+
+	test_anagram_detector
+			-- Test ANAGRAM_DETECTOR solution.
+		local
+			sol: ANAGRAM_DETECTOR
+		do
+			create sol.make
+			assert ("listen-silent anagrams", sol.are_anagrams ("listen", "silent"))
+			assert ("triangle-integral anagrams", sol.are_anagrams ("triangle", "integral"))
+			assert ("hello-world not anagrams", not sol.are_anagrams ("hello", "world"))
+			assert ("abc-cab anagrams", sol.are_anagrams ("abc", "cab"))
+		end
+
+feature -- Tier 2: Easy Tests - String Manipulation
+
+	test_trim_string
+			-- Test TRIM_STRING solution.
+		local
+			sol: TRIM_STRING
+		do
+			create sol.make
+			assert ("trim both", sol.trim ("   hello   ").same_string ("hello"))
+			assert ("trim left", sol.trim_left ("   hello   ").same_string ("hello   "))
+			assert ("trim right", sol.trim_right ("   hello   ").same_string ("   hello"))
+			assert ("no trim needed", sol.trim ("hello").same_string ("hello"))
+		end
+
+	test_repeat_string
+			-- Test REPEAT_STRING solution.
+		local
+			sol: REPEAT_STRING
+		do
+			create sol.make
+			assert ("ha x 5", sol.repeat ("ha", 5).same_string ("hahahahaha"))
+			assert ("abc x 0", sol.repeat ("abc", 0).same_string (""))
+			assert ("x x 3", sol.repeat ("x", 3).same_string ("xxx"))
+			assert ("repeat char *", sol.repeat_char ('*', 5).same_string ("*****"))
+		end
+
+	test_remove_vowels
+			-- Test REMOVE_VOWELS solution.
+		local
+			sol: REMOVE_VOWELS
+		do
+			create sol.make
+			assert ("hello -> hll", sol.remove_vowels ("hello").same_string ("hll"))
+			assert ("aeiou -> empty", sol.remove_vowels ("aeiou").same_string (""))
+			assert ("rhythm unchanged", sol.remove_vowels ("rhythm").same_string ("rhythm"))
+			assert ("is vowel a", sol.is_vowel ('a'))
+			assert ("is vowel E", sol.is_vowel ('E'))
+			assert ("b not vowel", not sol.is_vowel ('b'))
+		end
+
+	test_binary_digits
+			-- Test BINARY_DIGITS solution.
+		local
+			sol: BINARY_DIGITS
+		do
+			create sol.make
+			assert ("5 is 101", sol.to_binary (5).same_string ("101"))
+			assert ("0 is 0", sol.to_binary (0).same_string ("0"))
+			assert ("255 is 11111111", sol.to_binary (255).same_string ("11111111"))
+			assert ("8 is 1000", sol.to_binary (8).same_string ("1000"))
+		end
+
+	test_count_occurrences
+			-- Test COUNT_OCCURRENCES solution.
+		local
+			sol: COUNT_OCCURRENCES
+		do
+			create sol.make
+			assert ("th in truths", sol.count_occurrences ("the three truths", "th") = 3)
+			assert ("o in hello world", sol.count_occurrences ("hello world", "o") = 2)
+			assert ("xyz not found", sol.count_occurrences ("hello world", "xyz") = 0)
+			assert ("overlapping aa", sol.count_overlapping ("aaaaaa", "aa") = 5)
+		end
+
+	test_string_case
+			-- Test STRING_CASE solution.
+		local
+			sol: STRING_CASE
+		do
+			create sol.make
+			assert ("upper", sol.to_upper ("hello").same_string ("HELLO"))
+			assert ("lower", sol.to_lower ("HELLO").same_string ("hello"))
+			assert ("title", sol.to_title ("hello world").same_string ("Hello World"))
+			assert ("capitalize", sol.capitalize ("hello world").same_string ("Hello world"))
+			assert ("swap case", sol.swap_case ("Hello").same_string ("hELLO"))
+		end
+
+	test_word_wrap
+			-- Test WORD_WRAP solution.
+		local
+			sol: WORD_WRAP
+			wrapped: STRING
+		do
+			create sol.make
+			wrapped := sol.word_wrap ("hello world from Eiffel", 12)
+			-- Should have at least one newline for short width
+			assert ("wrapped has newlines", wrapped.has ('%N'))
+			assert ("not empty", not wrapped.is_empty)
+		end
+
+	test_run_length_encoding
+			-- Test RUN_LENGTH_ENCODING solution.
+		local
+			sol: RUN_LENGTH_ENCODING
+			encoded, decoded: STRING
+		do
+			create sol.make
+			encoded := sol.encode ("WWWWB")
+			assert ("encode WWWWB", encoded.same_string ("4W1B"))
+			decoded := sol.decode (encoded)
+			assert ("decode back", decoded.same_string ("WWWWB"))
+			assert ("roundtrip", sol.decode (sol.encode ("AAABBBCCC")).same_string ("AAABBBCCC"))
+		end
+
+	test_power
+			-- Test POWER solution.
+		local
+			sol: POWER
+		do
+			create sol.make
+			assert ("2^10 = 1024", sol.power (2, 10) = 1024.0)
+			assert ("3^4 = 81", sol.power (3, 4) = 81.0)
+			assert ("10^0 = 1", sol.power (10, 0) = 1.0)
+			assert ("power_int 2^10", sol.power_int (2, 10) = {INTEGER_64} 1024)
+			assert ("power_int 5^3", sol.power_int (5, 3) = {INTEGER_64} 125)
+		end
+
+	test_sum_digits
+			-- Test SUM_DIGITS solution.
+		local
+			sol: SUM_DIGITS
+		do
+			create sol.make
+			assert ("sum_digits 12345", sol.sum_digits (12345) = 15)
+			assert ("sum_digits 999", sol.sum_digits (999) = 27)
+			assert ("sum_digits 0", sol.sum_digits (0) = 0)
+			assert ("sum_digits 1", sol.sum_digits (1) = 1)
+			assert ("binary sum 255", sol.sum_digits_base (255, 2) = 8)
+		end
+
+	test_lipogram
+			-- Test LIPOGRAM solution.
+		local
+			sol: LIPOGRAM
+		do
+			create sol.make
+			assert ("pangram not lipogram for e", not sol.is_lipogram ("The quick brown fox jumps over the lazy dog", 'e'))
+			assert ("no e is lipogram for e", sol.is_lipogram ("no fifth symbol", 'e'))
+			assert ("missing letters", sol.missing_letters ("Hello").count > 0)
+		end
+
+	test_left_pad
+			-- Test LEFT_PAD solution.
+		local
+			sol: LEFT_PAD
+		do
+			create sol.make
+			assert ("pad hello", sol.left_pad ("hello", 10, ' ').same_string ("     hello"))
+			assert ("pad 42 with zeros", sol.left_pad ("42", 5, '0').same_string ("00042"))
+			assert ("no pad needed", sol.left_pad ("long string", 5, '*').same_string ("long string"))
+			assert ("right pad", sol.right_pad ("hello", 10, ' ').same_string ("hello     "))
+		end
+
 feature -- Tier 3: Moderate Tests
 
 	test_towers_of_hanoi
@@ -332,6 +667,61 @@ feature -- Tier 3: Moderate Tests
 			c := a * b
 			assert ("mul num", c.numerator = 1)
 			assert ("mul den", c.denominator = 6)
+		end
+
+	test_levenshtein_distance
+			-- Test LEVENSHTEIN_DISTANCE solution.
+		local
+			sol: LEVENSHTEIN_DISTANCE
+		do
+			create sol.make
+			assert ("kitten-sitting = 3", sol.distance ("kitten", "sitting") = 3)
+			assert ("hello-hello = 0", sol.distance ("hello", "hello") = 0)
+			assert ("empty-abc = 3", sol.distance ("", "abc") = 3)
+			assert ("abc-empty = 3", sol.distance ("abc", "") = 3)
+			assert ("saturday-sunday", sol.distance ("saturday", "sunday") = 3)
+		end
+
+	test_hamming_distance
+			-- Test HAMMING_DISTANCE solution.
+		local
+			sol: HAMMING_DISTANCE
+		do
+			create sol.make
+			assert ("karolin-kathrin = 3", sol.distance ("karolin", "kathrin") = 3)
+			assert ("hello-hello = 0", sol.distance ("hello", "hello") = 0)
+			assert ("1011101-1001001 = 2", sol.distance ("1011101", "1001001") = 2)
+			-- 37 = 100101, 5 = 000101, XOR = 100000 (1 bit different)
+			assert ("binary 37 vs 5", sol.binary_distance (37, 5) = 1)
+		end
+
+	test_rms
+			-- Test RMS solution.
+		local
+			sol: RMS
+		do
+			create sol.make
+			-- RMS of 1-10 is approximately 6.2048
+			assert ("rms non-zero", sol.root_mean_square (<<1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0>>) > 6.0)
+			assert ("rms > arithmetic mean", sol.root_mean_square (<<1.0, 2.0, 3.0, 4.0, 5.0>>) >= sol.arithmetic_mean (<<1.0, 2.0, 3.0, 4.0, 5.0>>))
+		end
+
+	test_pythagorean_means
+			-- Test PYTHAGOREAN_MEANS solution.
+		local
+			sol: PYTHAGOREAN_MEANS
+			arr: ARRAY [REAL_64]
+			am, gm, hm: REAL_64
+		do
+			create sol.make
+			arr := <<1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0>>
+			am := sol.arithmetic_mean (arr)
+			gm := sol.geometric_mean (arr)
+			hm := sol.harmonic_mean (arr)
+			-- A >= G >= H for positive numbers
+			assert ("AM >= GM", am >= gm)
+			assert ("GM >= HM", gm >= hm)
+			assert ("AM = 5.5", am = 5.5)
 		end
 
 feature -- Tier 4: Complex Tests
