@@ -43,14 +43,19 @@ feature -- Tier 2: Easy
 	abc_words: detachable ABC_WORDS
 	abs_function: detachable ABS_FUNCTION
 	add_arrays: detachable ADD_ARRAYS
+	additive_primes: detachable ADDITIVE_PRIMES
 	align_columns: detachable ALIGN_COLUMNS
+	almost_prime: detachable ALMOST_PRIME
 	anagram: detachable ANAGRAM
 	anagram_detector: detachable ANAGRAM_DETECTOR
 	anagram_generator: detachable ANAGRAM_GENERATOR
+	anti_primes: detachable ANTI_PRIMES
 	apply_callback: detachable APPLY_CALLBACK
+	arithmetic_geometric_mean: detachable ARITHMETIC_GEOMETRIC_MEAN
 	arithmetic_mean: detachable ARITHMETIC_MEAN
 	array_reverse: detachable ARRAY_REVERSE
 	atbash_cipher: detachable ATBASH_CIPHER
+	attractive_numbers: detachable ATTRACTIVE_NUMBERS
 	averages_mode: detachable AVERAGES_MODE
 	binary_digits: detachable BINARY_DIGITS
 	binary_search: detachable BINARY_SEARCH
@@ -64,6 +69,7 @@ feature -- Tier 2: Easy
 	char_code: detachable CHAR_CODE
 	check_file_exists: detachable CHECK_FILE_EXISTS
 	cocktail_sort: detachable COCKTAIL_SORT
+	commatizing_numbers: detachable COMMATIZING_NUMBERS
 	copy_stdin_to_stdout: detachable COPY_STDIN_TO_STDOUT
 	copy_string: detachable COPY_STRING
 	count_in_string: detachable COUNT_IN_STRING
@@ -113,6 +119,7 @@ feature -- Tier 2: Easy
 	moving_average: detachable MOVING_AVERAGE
 	multisplit: detachable MULTISPLIT
 	natural_sorting: detachable NATURAL_SORTING
+	number_classifications: detachable NUMBER_CLASSIFICATIONS
 	number_words: detachable NUMBER_WORDS
 	ordered_words: detachable ORDERED_WORDS
 	palindrome: detachable PALINDROME
@@ -180,12 +187,59 @@ feature -- Tier 2: Easy
 	user_input_text: detachable USER_INPUT_TEXT
 	vigenere_cipher: detachable VIGENERE_CIPHER
 	word_wrap: detachable WORD_WRAP
+	circular_primes: detachable CIRCULAR_PRIMES
+	descending_primes: detachable DESCENDING_PRIMES
+	emirp_primes: detachable EMIRP_PRIMES
+	cuban_primes: detachable CUBAN_PRIMES
+	brilliant_numbers: detachable BRILLIANT_NUMBERS
+	chowla_numbers: detachable CHOWLA_NUMBERS
+	blum_integers: detachable BLUM_INTEGERS
+	calculating_e: detachable CALCULATING_E
+	eulers_constant: detachable EULERS_CONSTANT
+	combinations: detachable COMBINATIONS
+	combinations_with_repetitions: detachable COMBINATIONS_WITH_REPETITIONS
+	permutations: detachable PERMUTATIONS
+	cartesian_product: detachable CARTESIAN_PRODUCT
+	fusc_sequence: detachable FUSC_SEQUENCE
+	floyds_triangle: detachable FLOYDS_TRIANGLE
+	pascals_triangle: detachable PASCALS_TRIANGLE
+	base64_decode: detachable BASE64_DECODE
+	rail_fence_cipher: detachable RAIL_FENCE_CIPHER
+	damm_algorithm: detachable DAMM_ALGORITHM
+	verhoeff_algorithm: detachable VERHOEFF_ALGORITHM
+	cusip_validation: detachable CUSIP_VALIDATION
+	singly_linked_list_ref: detachable SINGLY_LINKED_LIST
+	stack_ref: detachable STACK [ANY]
+	queue_ref: detachable QUEUE [ANY]
+	deque_ref: detachable DEQUE [ANY]
+	hash_from_two_arrays: detachable HASH_FROM_TWO_ARRAYS
+	associative_array: detachable ASSOCIATIVE_ARRAY
+	set_operations: detachable SET_OPERATIONS
 
 feature -- Tier 3: Moderate
 
+	bell_numbers: detachable BELL_NUMBERS
 	breadth_first_search: detachable BREADTH_FIRST_SEARCH
+	catalan_numbers: detachable CATALAN_NUMBERS
+	complex_arithmetic: detachable COMPLEX_ARITHMETIC
 	depth_first_search: detachable DEPTH_FIRST_SEARCH
+	rational_arithmetic: detachable RATIONAL_ARITHMETIC
 	towers_of_hanoi: detachable TOWERS_OF_HANOI
+	duffinian_numbers: detachable DUFFINIAN_NUMBERS
+	benfords_law: detachable BENFORDS_LAW
+	bernoulli_numbers: detachable BERNOULLI_NUMBERS
+	farey_sequence: detachable FAREY_SEQUENCE
+	calkin_wilf_sequence: detachable CALKIN_WILF_SEQUENCE
+	de_bruijn_sequences: detachable DE_BRUIJN_SEQUENCES
+	fibonacci_n_step: detachable FIBONACCI_N_STEP
+	crc32: detachable CRC32
+	bifid_cipher: detachable BIFID_CIPHER
+	playfair_cipher: detachable PLAYFAIR_CIPHER
+	chaocipher: detachable CHAOCIPHER
+	doubly_linked_list_ref: detachable DOUBLY_LINKED_LIST [ANY]
+	circular_list_ref: detachable CIRCULAR_LIST [ANY]
+	priority_queue_ref: detachable PRIORITY_QUEUE [INTEGER]
+	binary_search_tree_ref: detachable BINARY_SEARCH_TREE [INTEGER]
 
 feature -- Tier 4: Complex
 
@@ -194,10 +248,56 @@ feature -- Tier 4: Complex
 	sieve_of_eratosthenes: detachable SIEVE_OF_ERATOSTHENES
 	tree_node: detachable TREE_NODE
 	tree_traversal: detachable TREE_TRAVERSAL
+	adfgvx_cipher: detachable ADFGVX_CIPHER
+	cramers_rule: detachable CRAMERS_RULE
+	determinant: detachable DETERMINANT
+	dijkstra_shortest_path: detachable DIJKSTRA_SHORTEST_PATH
+	eigenvalues: detachable EIGENVALUES  -- Needs sqrt helper, VEVI fixes
+	eulerian_path: detachable EULERIAN_PATH
+	fifteen_puzzle: detachable FIFTEEN_PUZZLE
+	floyd_warshall: detachable FLOYD_WARSHALL
+	game_of_life: detachable GAME_OF_LIFE
+	gauss_jordan: detachable GAUSS_JORDAN
+	graph_coloring: detachable GRAPH_COLORING
+	hamiltonian_path: detachable HAMILTONIAN_PATH
+	knights_tour: detachable KNIGHTS_TOUR
+	lu_decomposition: detachable LU_DECOMPOSITION
+	mastermind: detachable MASTERMIND
+	matrix_inverse: detachable MATRIX_INVERSE
+	matrix_multiplication: detachable MATRIX_MULTIPLICATION
+	matrix_transpose: detachable MATRIX_TRANSPOSE
+	maze_generation: detachable MAZE_GENERATION
+	maze_solving: detachable MAZE_SOLVING
+	minimum_spanning_tree: detachable MINIMUM_SPANNING_TREE
+	n_queens: detachable N_QUEENS
+	strongly_connected_components: detachable STRONGLY_CONNECTED_COMPONENTS
+	sudoku_solver: detachable SUDOKU_SOLVER
+	topological_sort: detachable TOPOLOGICAL_SORT
 
-feature -- Generic Types
+feature -- Functional Programming
 
-	queue_operations: detachable QUEUE_OPERATIONS [ANY]
-	stack_operations: detachable STACK_OPERATIONS [ANY]
+	closures: detachable CLOSURES
+	continuations: detachable CONTINUATIONS
+	coroutines: detachable COROUTINES
+	currying: detachable CURRYING
+	generator_pattern: detachable GENERATOR_PATTERN
+	higher_order_functions: detachable HIGHER_ORDER_FUNCTIONS
+	lazy_evaluation: detachable LAZY_EVALUATION
+	memoization: detachable MEMOIZATION
+	range_generator: detachable RANGE_GENERATOR
+
+feature -- Generic Types and Helpers
+
+	queue_operations_ref: detachable QUEUE_OPERATIONS [ANY]
+	stack_operations_ref: detachable STACK_OPERATIONS [ANY]
+	queue_example_ref: detachable QUEUE_EXAMPLE [ANY]
+	stack_example_ref: detachable STACK_EXAMPLE [ANY]
+	priority_queue_example_ref: detachable PRIORITY_QUEUE_EXAMPLE [INTEGER]
+	binary_search_tree_example_ref: detachable BINARY_SEARCH_TREE_EXAMPLE [INTEGER]
+	bst_node_ref: detachable BST_NODE [INTEGER]
+	circ_node_ref: detachable CIRC_NODE [ANY]
+	dll_node_ref: detachable DLL_NODE [ANY]
+	sll_node_ref: detachable SLL_NODE [ANY]
+	sll_integer_node: detachable SLL_INTEGER_NODE
 
 end

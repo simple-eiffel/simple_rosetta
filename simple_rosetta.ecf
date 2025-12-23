@@ -60,7 +60,12 @@
 			<exclude>/\.git$</exclude>
 		</file_rule>
 		<library name="simple_file" location="$SIMPLE_EIFFEL\simple_file\simple_file.ecf"/>
-		<cluster name="solutions" location=".\solutions\" recursive="true"/>
+		<library name="simple_math" location="$SIMPLE_EIFFEL\simple_math\simple_math.ecf"/>
+		<library name="simple_testing" location="$SIMPLE_EIFFEL\simple_testing\simple_testing.ecf"/>
+		<library name="testing" location="$ISE_LIBRARY\library\testing\testing.ecf"/>
+		<cluster name="solutions" location=".\solutions\" recursive="true">
+			<tests name="testing_solutions" location="$SIMPLE_EIFFEL\simple_rosetta\solutions\testing\"/>
+		</cluster>
 	</target>
 	<target name="rosetta_cli" extends="simple_rosetta">
 		<root class="ROSETTA_CLI" feature="make"/>
@@ -69,5 +74,9 @@
 			<exclude>/\.git$</exclude>
 		</file_rule>
 		<library name="simple_file" location="$SIMPLE_EIFFEL\simple_file\simple_file.ecf"/>
+	</target>
+	<target name="solutions_tests" extends="simple_rosetta_solutions">
+		<description>Testing for the solutions code in the solutions target.</description>
+		<root class="TEST_APP" feature="make"/>
 	</target>
 </system>
