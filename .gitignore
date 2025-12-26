@@ -7,3 +7,4 @@ EIFGENs/
 # Test artifacts
 live_test.db
 test_rosetta.db
+exception_trace.log
