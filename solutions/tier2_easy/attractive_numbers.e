@@ -118,7 +118,7 @@ feature -- Demo
 			print ("Attractive numbers up to 120:%N")
 			nums := attractive_numbers_up_to (120)
 			from i := 1 until i > nums.count loop
-				print (nums [i].out.as_string_8 + if nums [i] < 10 then "  " elseif nums [i] < 100 then " " else "" end)
+				print (nums [i].out.to_string_8 + if nums [i] < 10 then "  " elseif nums [i] < 100 then " " else "" end)
 				if i \\ 15 = 0 then
 					print ("%N")
 				else

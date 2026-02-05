@@ -25,12 +25,12 @@ feature {NONE} -- Initialization
 			no_error: not has_error
 		end
 
-	make_with_db (db_path: STRING)
+	make_with_db (a_db_path: STRING)
 			-- Create with database at `db_path'.
 		require
-			path_not_empty: not db_path.is_empty
+			path_not_empty: not a_db_path.is_empty
 		do
-			create store.make_with_path (db_path)
+			create store.make_with_path (a_db_path)
 			create client.make
 			create wiki_parser
 			create last_error.make_empty
@@ -114,10 +114,10 @@ feature -- Import Operations
 			end
 		end
 
-	import_task (task_name: STRING)
+	import_task (a_task_name: STRING)
 			-- Import single task with all solutions.
 		require
-			name_not_empty: not task_name.is_empty
+			name_not_empty: not a_task_name.is_empty
 		local
 			content: detachable STRING
 			task: ROSETTA_TASK
@@ -126,17 +126,17 @@ feature -- Import Operations
 			i: INTEGER
 		do
 			last_error.wipe_out
-			progress_callback := "Fetching: " + task_name
+			progress_callback := "Fetching: " + a_task_name
 
-			content := client.fetch_task_content (task_name)
+			content := client.fetch_task_content (a_task_name)
 			if client.has_error then
 				last_error := client.last_error
 			elseif attached content as c then
 				-- Create or update task
-				if attached store.find_task_by_name (task_name) as existing then
+				if attached store.find_task_by_name (a_task_name) as existing then
 					task := existing
 				else
-					create task.make (task_name)
+					create task.make (a_task_name)
 				end
 
 				task.set_description (wiki_parser.extract_description (c))
@@ -168,16 +168,16 @@ feature -- Import Operations
 					end
 				end
 
-				progress_callback := "Imported: " + task_name + " (" + solutions.count.out + " solutions)"
+				progress_callback := "Imported: " + a_task_name + " (" + solutions.count.out + " solutions)"
 			else
-				last_error := "No content returned for: " + task_name
+				last_error := "No content returned for: " + a_task_name
 			end
 		end
 
-	import_tasks_with_solutions (limit: INTEGER)
+	import_tasks_with_solutions (a_limit: INTEGER)
 			-- Import first `limit' tasks with full solutions.
 		require
-			positive_limit: limit > 0
+			positive_limit: a_limit > 0
 		local
 			tasks: ARRAYED_LIST [ROSETTA_TASK]
 			count, i: INTEGER
@@ -191,10 +191,10 @@ feature -- Import Operations
 
 			if not has_error then
 				tasks := store.all_tasks
-				from i := 1 until i > tasks.count or count >= limit loop
+				from i := 1 until i > tasks.count or count >= a_limit loop
 					import_task (tasks.i_th (i).name)
 					count := count + 1
-					progress_callback := "Imported " + count.out + "/" + limit.out + " tasks"
+					progress_callback := "Imported " + count.out + "/" + a_limit.out + " tasks"
 					i := i + 1
 				end
 			end
@@ -202,20 +202,20 @@ feature -- Import Operations
 
 feature -- Query Operations
 
-	find_task (name: STRING): detachable ROSETTA_TASK
+	find_task (a_name: STRING): detachable ROSETTA_TASK
 			-- Find task by `name'.
 		require
-			name_not_empty: not name.is_empty
+			name_not_empty: not a_name.is_empty
 		do
-			Result := store.find_task_by_name (name)
+			Result := store.find_task_by_name (a_name)
 		end
 
-	search (query: STRING): ARRAYED_LIST [ROSETTA_TASK]
+	search (a_query: STRING): ARRAYED_LIST [ROSETTA_TASK]
 			-- Search tasks by name or description.
 		require
-			query_not_empty: not query.is_empty
+			query_not_empty: not a_query.is_empty
 		do
-			Result := store.search_tasks (query)
+			Result := store.search_tasks (a_query)
 		end
 
 	tasks_without_eiffel: ARRAYED_LIST [ROSETTA_TASK]
@@ -230,43 +230,43 @@ feature -- Query Operations
 			Result := store.tasks_with_eiffel
 		end
 
-	solutions_for (task_name: STRING): ARRAYED_LIST [ROSETTA_SOLUTION]
+	solutions_for (a_task_name: STRING): ARRAYED_LIST [ROSETTA_SOLUTION]
 			-- All solutions for task with `task_name'.
 		require
-			name_not_empty: not task_name.is_empty
+			name_not_empty: not a_task_name.is_empty
 		do
 			create Result.make (10)
-			if attached store.find_task_by_name (task_name) as task then
+			if attached store.find_task_by_name (a_task_name) as task then
 				Result := store.solutions_for_task (task.id)
 			end
 		end
 
-	eiffel_solution_for (task_name: STRING): detachable ROSETTA_SOLUTION
+	eiffel_solution_for (a_task_name: STRING): detachable ROSETTA_SOLUTION
 			-- Eiffel solution for task with `task_name', if any.
 		require
-			name_not_empty: not task_name.is_empty
+			name_not_empty: not a_task_name.is_empty
 		do
-			if attached store.find_task_by_name (task_name) as task then
+			if attached store.find_task_by_name (a_task_name) as task then
 				Result := store.eiffel_solution_for_task (task.id)
 			end
 		end
 
 feature -- Comparison
 
-	compare_solutions (task_name: STRING; languages: ARRAY [STRING]): STRING
+	compare_solutions (a_task_name: STRING; languages: ARRAY [STRING]): STRING
 			-- Side-by-side comparison of solutions in `languages'.
 		require
-			name_not_empty: not task_name.is_empty
+			name_not_empty: not a_task_name.is_empty
 			languages_not_empty: not languages.is_empty
 		local
 			solutions: ARRAYED_LIST [ROSETTA_SOLUTION]
 			i, j: INTEGER
 		do
 			create Result.make (2000)
-			Result.append ("Task: " + task_name + "%N")
+			Result.append ("Task: " + a_task_name + "%N")
 			Result.append (create {STRING}.make_filled ('=', 50) + "%N%N")
 
-			solutions := solutions_for (task_name)
+			solutions := solutions_for (a_task_name)
 
 			from i := languages.lower until i > languages.upper loop
 				Result.append ("=== " + languages [i] + " ===%N")
@@ -283,10 +283,10 @@ feature -- Comparison
 
 feature -- Export
 
-	export_tasks_csv (path: STRING)
+	export_tasks_csv (a_path: STRING)
 			-- Export all tasks to CSV at `path'.
 		require
-			path_not_empty: not path.is_empty
+			path_not_empty: not a_path.is_empty
 		local
 			file: PLAIN_TEXT_FILE
 			tasks: ARRAYED_LIST [ROSETTA_TASK]
@@ -296,7 +296,7 @@ feature -- Export
 			last_error.wipe_out
 			tasks := store.all_tasks
 
-			create file.make_create_read_write (path)
+			create file.make_create_read_write (a_path)
 			file.put_string ("id,name,has_eiffel,validated,languages%N")
 
 			from i := 1 until i > tasks.count loop
@@ -315,7 +315,7 @@ feature -- Export
 			end
 
 			file.close
-			progress_callback := "Exported " + tasks.count.out + " tasks to " + path
+			progress_callback := "Exported " + tasks.count.out + " tasks to " + a_path
 		end
 
 feature {NONE} -- Implementation

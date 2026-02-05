@@ -69,16 +69,16 @@ feature -- API Operations
 			result_attached: Result /= Void
 		end
 
-	fetch_task_content (task_name: STRING): detachable STRING
+	fetch_task_content (a_task_name: STRING): detachable STRING
 			-- Fetch raw wiki content for 'task_name'.
 		require
-			name_not_empty: not task_name.is_empty
+			name_not_empty: not a_task_name.is_empty
 		local
 			url: STRING
 			encoded_name: STRING
 		do
 			last_error.wipe_out
-			encoded_name := url_encode (task_name)
+			encoded_name := url_encode (a_task_name)
 			url := Raw_content_url + encoded_name
 
 			wait_for_rate_limit
@@ -88,18 +88,18 @@ feature -- API Operations
 			end
 		end
 
-	fetch_task_with_solutions (task_name: STRING): detachable ROSETTA_TASK
+	fetch_task_with_solutions (a_task_name: STRING): detachable ROSETTA_TASK
 			-- Fetch task and all its solutions.
 		require
-			name_not_empty: not task_name.is_empty
+			name_not_empty: not a_task_name.is_empty
 		local
 			content: detachable STRING
 			solutions: ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
 			i: INTEGER
 		do
-			content := fetch_task_content (task_name)
+			content := fetch_task_content (a_task_name)
 			if attached content as c and then not c.is_empty then
-				create Result.make (task_name)
+				create Result.make (a_task_name)
 				Result.set_description (wiki_parser.extract_description (c))
 
 				solutions := wiki_parser.extract_solutions (c)
@@ -114,7 +114,7 @@ feature -- API Operations
 
 feature {NONE} -- Implementation
 
-	fetch_task_batch (continue_token: detachable STRING): ARRAYED_LIST [ROSETTA_TASK]
+	fetch_task_batch (a_continue_token: detachable STRING): ARRAYED_LIST [ROSETTA_TASK]
 			-- Fetch a batch of up to 500 tasks.
 		local
 			url: STRING
@@ -129,7 +129,7 @@ feature {NONE} -- Implementation
 			url.append ("&cmtitle=Category:Programming_Tasks")
 			url.append ("&cmlimit=500&format=json")
 
-			if attached continue_token as ct then
+			if attached a_continue_token as ct then
 				url.append ("&cmcontinue=")
 				url.append (url_encode (ct))
 			end
@@ -150,7 +150,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	parse_task_batch (json: SIMPLE_JSON_VALUE): ARRAYED_LIST [ROSETTA_TASK]
+	parse_task_batch (a_json: SIMPLE_JSON_VALUE): ARRAYED_LIST [ROSETTA_TASK]
 			-- Parse task batch from API 'json' response.
 		local
 			task: ROSETTA_TASK
@@ -161,8 +161,8 @@ feature {NONE} -- Implementation
 		do
 			create Result.make (500)
 
-			if json.is_object then
-				root_obj := json.as_object
+			if a_json.is_object then
+				root_obj := a_json.as_object
 
 				-- Extract continue token if present
 				if attached root_obj.object_item ("continue") as cont then
@@ -220,22 +220,22 @@ feature {NONE} -- Implementation
 			execution_environment.sleep (1_000_000_000)
 		end
 
-	url_encode (s: STRING): STRING
+	url_encode (a_s: STRING): STRING
 			-- URL encode 's'.
 		do
-			Result := s.twin
+			Result := a_s.twin
 			Result.replace_substring_all (" ", "_")
 		end
 
-	safe_to_string_8 (s: READABLE_STRING_32): STRING
+	safe_to_string_8 (a_s: READABLE_STRING_32): STRING
 			-- Convert STRING_32 to STRING_8, replacing non-ASCII with '?'.
 		local
 			i: INTEGER
 			c: CHARACTER_32
 		do
-			create Result.make (s.count)
-			from i := 1 until i > s.count loop
-				c := s.item (i)
+			create Result.make (a_s.count)
+			from i := 1 until i > a_s.count loop
+				c := a_s.item (i)
 				if c.natural_32_code <= 127 then
 					Result.append_character (c.to_character_8)
 				else

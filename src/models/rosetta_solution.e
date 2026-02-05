@@ -183,10 +183,10 @@ feature -- Output
 			Result.append (")")
 		end
 
-	code_preview (max_lines: INTEGER): STRING
+	code_preview (a_max_lines: INTEGER): STRING
 			-- First `max_lines' of code
 		require
-			positive_max: max_lines > 0
+			positive_max: a_max_lines > 0
 		local
 			lines: INTEGER
 			i: INTEGER
@@ -196,7 +196,7 @@ feature -- Output
 				i := 1
 				lines := 0
 			until
-				i > code.count or lines >= max_lines
+				i > code.count or lines >= a_max_lines
 			loop
 				if code.item (i) = '%N' then
 					lines := lines + 1
@@ -204,9 +204,9 @@ feature -- Output
 				Result.append_character (code.item (i))
 				i := i + 1
 			end
-			if lines >= max_lines and i <= code.count then
+			if lines >= a_max_lines and i <= code.count then
 				Result.append ("%N... (")
-				Result.append_integer (line_count - max_lines)
+				Result.append_integer (line_count - a_max_lines)
 				Result.append (" more lines)")
 			end
 		end

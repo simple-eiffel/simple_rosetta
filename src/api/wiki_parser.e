@@ -12,17 +12,17 @@ create
 
 feature -- Parsing
 
-	extract_description (wiki_content: STRING): STRING
+	extract_description (a_wiki_content: STRING): STRING
 			-- Extract task description from `wiki_content'.
 			-- Description is text before first language header.
 		require
-			content_not_empty: not wiki_content.is_empty
+			content_not_empty: not a_wiki_content.is_empty
 		local
 			header_pos: INTEGER
 		do
-			header_pos := wiki_content.substring_index ("=={{header|", 1)
+			header_pos := a_wiki_content.substring_index ("=={{header|", 1)
 			if header_pos > 1 then
-				Result := wiki_content.substring (1, header_pos - 1)
+				Result := a_wiki_content.substring (1, header_pos - 1)
 				Result := clean_wiki_markup (Result)
 			else
 				create Result.make_empty
@@ -31,10 +31,10 @@ feature -- Parsing
 			result_attached: Result /= Void
 		end
 
-	extract_languages (wiki_content: STRING): ARRAYED_LIST [STRING]
+	extract_languages (a_wiki_content: STRING): ARRAYED_LIST [STRING]
 			-- Extract all language names from `wiki_content'.
 		require
-			content_not_empty: not wiki_content.is_empty
+			content_not_empty: not a_wiki_content.is_empty
 		local
 			regex: SIMPLE_REGEX
 			matches: SIMPLE_REGEX_MATCH_LIST
@@ -46,7 +46,7 @@ feature -- Parsing
 
 			regex.compile (Header_pattern)
 			if regex.is_compiled then
-				matches := regex.matches (wiki_content)
+				matches := regex.matches (a_wiki_content)
 				from i := 1 until i > matches.count loop
 					if attached matches.item (i).group (1) as g then
 						lang := g.to_string_32
@@ -61,10 +61,10 @@ feature -- Parsing
 			result_attached: Result /= Void
 		end
 
-	extract_solutions (wiki_content: STRING): ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
+	extract_solutions (a_wiki_content: STRING): ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
 			-- Extract all language solutions from `wiki_content'.
 		require
-			content_not_empty: not wiki_content.is_empty
+			content_not_empty: not a_wiki_content.is_empty
 		local
 			regex: SIMPLE_REGEX
 			matches: SIMPLE_REGEX_MATCH_LIST
@@ -80,7 +80,7 @@ feature -- Parsing
 
 			regex.compile (Header_pattern)
 			if regex.is_compiled then
-				matches := regex.matches (wiki_content)
+				matches := regex.matches (a_wiki_content)
 
 				-- Collect all header positions
 				from i := 1 until i > matches.count loop
@@ -104,9 +104,9 @@ feature -- Parsing
 					end
 
 					-- Find end of header line
-					current_pos := wiki_content.index_of ('%N', current_pos)
+					current_pos := a_wiki_content.index_of ('%N', current_pos)
 					if current_pos = 0 then
-						current_pos := wiki_content.count + 1
+						current_pos := a_wiki_content.count + 1
 					else
 						current_pos := current_pos + 1
 					end
@@ -116,15 +116,15 @@ feature -- Parsing
 						if attached {INTEGER} positions.i_th (j + 1).pos as np then
 							next_pos := np
 						else
-							next_pos := wiki_content.count + 1
+							next_pos := a_wiki_content.count + 1
 						end
 					else
-						next_pos := wiki_content.count + 1
+						next_pos := a_wiki_content.count + 1
 					end
 
 					-- Extract section
 					if current_pos < next_pos then
-						section_content := wiki_content.substring (current_pos, next_pos - 1)
+						section_content := a_wiki_content.substring (current_pos, next_pos - 1)
 						code := extract_code_from_section (section_content)
 						if not code.is_empty then
 							Result.extend ([current_language, code])
@@ -138,15 +138,15 @@ feature -- Parsing
 			result_attached: Result /= Void
 		end
 
-	extract_eiffel_solution (wiki_content: STRING): detachable STRING
+	extract_eiffel_solution (a_wiki_content: STRING): detachable STRING
 			-- Extract Eiffel code from `wiki_content', if present.
 		require
-			content_not_empty: not wiki_content.is_empty
+			content_not_empty: not a_wiki_content.is_empty
 		local
 			solutions: ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
 			i: INTEGER
 		do
-			solutions := extract_solutions (wiki_content)
+			solutions := extract_solutions (a_wiki_content)
 			from i := 1 until i > solutions.count loop
 				if attached {STRING} solutions.i_th (i).language as lang then
 					if lang.same_string ("Eiffel") then
@@ -159,17 +159,17 @@ feature -- Parsing
 			end
 		end
 
-	has_eiffel (wiki_content: STRING): BOOLEAN
+	has_eiffel (a_wiki_content: STRING): BOOLEAN
 			-- Does `wiki_content' contain an Eiffel section?
 		require
-			content_not_empty: not wiki_content.is_empty
+			content_not_empty: not a_wiki_content.is_empty
 		do
-			Result := wiki_content.has_substring ("=={{header|Eiffel}}==")
+			Result := a_wiki_content.has_substring ("=={{header|Eiffel}}==")
 		end
 
 feature {NONE} -- Implementation
 
-	extract_code_from_section (section: STRING): STRING
+	extract_code_from_section (a_section: STRING): STRING
 			-- Extract code blocks from wiki `section'.
 		local
 			start_tag, end_tag: INTEGER
@@ -180,13 +180,13 @@ feature {NONE} -- Implementation
 
 			-- Try <syntaxhighlight ...>
 			if not found then
-				start_tag := section.substring_index ("<syntaxhighlight", 1)
+				start_tag := a_section.substring_index ("<syntaxhighlight", 1)
 				if start_tag > 0 then
-					tag_end := section.index_of ('>', start_tag)
+					tag_end := a_section.index_of ('>', start_tag)
 					if tag_end > 0 then
-						end_tag := section.substring_index ("</syntaxhighlight>", tag_end)
+						end_tag := a_section.substring_index ("</syntaxhighlight>", tag_end)
 						if end_tag > tag_end then
-							Result := section.substring (tag_end + 1, end_tag - 1)
+							Result := a_section.substring (tag_end + 1, end_tag - 1)
 							Result := trim_code (Result)
 							found := True
 						end
@@ -196,13 +196,13 @@ feature {NONE} -- Implementation
 
 			-- Try <lang ...>
 			if not found then
-				start_tag := section.substring_index ("<lang", 1)
+				start_tag := a_section.substring_index ("<lang", 1)
 				if start_tag > 0 then
-					tag_end := section.index_of ('>', start_tag)
+					tag_end := a_section.index_of ('>', start_tag)
 					if tag_end > 0 then
-						end_tag := section.substring_index ("</lang>", tag_end)
+						end_tag := a_section.substring_index ("</lang>", tag_end)
 						if end_tag > tag_end then
-							Result := section.substring (tag_end + 1, end_tag - 1)
+							Result := a_section.substring (tag_end + 1, end_tag - 1)
 							Result := trim_code (Result)
 							found := True
 						end
@@ -212,21 +212,21 @@ feature {NONE} -- Implementation
 
 			-- Try <pre>
 			if not found then
-				start_tag := section.substring_index ("<pre>", 1)
+				start_tag := a_section.substring_index ("<pre>", 1)
 				if start_tag > 0 then
-					end_tag := section.substring_index ("</pre>", start_tag + 5)
+					end_tag := a_section.substring_index ("</pre>", start_tag + 5)
 					if end_tag > start_tag then
-						Result := section.substring (start_tag + 5, end_tag - 1)
+						Result := a_section.substring (start_tag + 5, end_tag - 1)
 						Result := trim_code (Result)
 					end
 				end
 			end
 		end
 
-	clean_wiki_markup (text: STRING): STRING
+	clean_wiki_markup (a_text: STRING): STRING
 			-- Remove wiki markup from `text'.
 		do
-			Result := text.twin
+			Result := a_text.twin
 			Result := remove_wiki_links (Result)
 			Result.replace_substring_all ("'''", "")
 			Result.replace_substring_all ("''", "")
@@ -237,12 +237,12 @@ feature {NONE} -- Implementation
 			Result.right_adjust
 		end
 
-	remove_wiki_links (text: STRING): STRING
+	remove_wiki_links (a_text: STRING): STRING
 			-- Remove [[link]] and [[link|display]] from text.
 		local
 			i, start_pos, pipe_pos, end_pos: INTEGER
 		do
-			Result := text.twin
+			Result := a_text.twin
 			from i := 1 until i > Result.count - 3 loop
 				if i + 1 <= Result.count and then Result.substring (i, i + 1).same_string ("[[") then
 					start_pos := i
@@ -267,10 +267,10 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	trim_code (code: STRING): STRING
+	trim_code (a_code: STRING): STRING
 			-- Trim leading/trailing whitespace from code.
 		do
-			Result := code.twin
+			Result := a_code.twin
 			Result.left_adjust
 			Result.right_adjust
 		end

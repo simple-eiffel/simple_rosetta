@@ -110,16 +110,16 @@ feature -- Statistics
 
 feature -- Task Operations
 
-	save_task (task: ROSETTA_TASK)
+	save_task (a_task: ROSETTA_TASK)
 			-- Save or update `task'.
 		require
-			task_valid: not task.name.is_empty
+			task_valid: not a_task.name.is_empty
 		do
 			last_error.wipe_out
-			if task.id > 0 then
-				update_task (task)
+			if a_task.id > 0 then
+				update_task (a_task)
 			else
-				insert_task (task)
+				insert_task (a_task)
 			end
 		end
 
@@ -219,16 +219,16 @@ feature -- Task Operations
 
 feature -- Solution Operations
 
-	save_solution (solution: ROSETTA_SOLUTION)
+	save_solution (a_solution: ROSETTA_SOLUTION)
 			-- Save or update `solution'.
 		require
-			solution_valid: not solution.language.is_empty and not solution.code.is_empty
+			solution_valid: not a_solution.language.is_empty and not a_solution.code.is_empty
 		do
 			last_error.wipe_out
-			if solution.id > 0 then
-				update_solution (solution)
+			if a_solution.id > 0 then
+				update_solution (a_solution)
 			else
-				insert_solution (solution)
+				insert_solution (a_solution)
 			end
 		end
 
@@ -274,55 +274,55 @@ feature -- Solution Operations
 
 feature {NONE} -- Database Operations
 
-	insert_task (task: ROSETTA_TASK)
+	insert_task (a_task: ROSETTA_TASK)
 			-- Insert new task.
 		do
-			db.execute_with_args ("INSERT INTO tasks (name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level) VALUES (?, ?, ?, ?, ?, ?)", <<task.name, task.description, task.category,
-				  bool_to_int (task.has_eiffel), bool_to_int (task.is_eiffel_validated), task.eiffel_validation_level>>)
-			task.set_id (db.last_insert_rowid.to_integer_32)
+			db.execute_with_args ("INSERT INTO tasks (name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level) VALUES (?, ?, ?, ?, ?, ?)", <<a_task.name, a_task.description, a_task.category,
+				  bool_to_int (a_task.has_eiffel), bool_to_int (a_task.is_eiffel_validated), a_task.eiffel_validation_level>>)
+			a_task.set_id (db.last_insert_rowid.to_integer_32)
 		end
 
-	update_task (task: ROSETTA_TASK)
+	update_task (a_task: ROSETTA_TASK)
 			-- Update existing task.
 		require
-			has_id: task.id > 0
+			has_id: a_task.id > 0
 		do
-			db.execute_with_args ("UPDATE tasks SET name = ?, description = ?, category = ?, has_eiffel = ?, eiffel_validated = ?, eiffel_validation_level = ? WHERE id = ?", <<task.name, task.description, task.category,
-				  bool_to_int (task.has_eiffel), bool_to_int (task.is_eiffel_validated), task.eiffel_validation_level, task.id>>)
+			db.execute_with_args ("UPDATE tasks SET name = ?, description = ?, category = ?, has_eiffel = ?, eiffel_validated = ?, eiffel_validation_level = ? WHERE id = ?", <<a_task.name, a_task.description, a_task.category,
+				  bool_to_int (a_task.has_eiffel), bool_to_int (a_task.is_eiffel_validated), a_task.eiffel_validation_level, a_task.id>>)
 		end
 
-	insert_solution (solution: ROSETTA_SOLUTION)
+	insert_solution (a_solution: ROSETTA_SOLUTION)
 			-- Insert new solution.
 		do
-			db.execute_with_args ("INSERT OR REPLACE INTO solutions (task_id, language, code, source, validated, validation_log) VALUES (?, ?, ?, ?, ?, ?)", <<solution.task_id, solution.language, solution.code,
-				  solution.source, bool_to_int (solution.is_validated), solution.validation_log>>)
-			solution.set_id (db.last_insert_rowid.to_integer_32)
+			db.execute_with_args ("INSERT OR REPLACE INTO solutions (task_id, language, code, source, validated, validation_log) VALUES (?, ?, ?, ?, ?, ?)", <<a_solution.task_id, a_solution.language, a_solution.code,
+				  a_solution.source, bool_to_int (a_solution.is_validated), a_solution.validation_log>>)
+			a_solution.set_id (db.last_insert_rowid.to_integer_32)
 		end
 
-	update_solution (solution: ROSETTA_SOLUTION)
+	update_solution (a_solution: ROSETTA_SOLUTION)
 			-- Update existing solution.
 		require
-			has_id: solution.id > 0
+			has_id: a_solution.id > 0
 		do
-			db.execute_with_args ("UPDATE solutions SET code = ?, source = ?, validated = ?, validation_log = ? WHERE id = ?", <<solution.code, solution.source, bool_to_int (solution.is_validated), solution.validation_log, solution.id>>)
+			db.execute_with_args ("UPDATE solutions SET code = ?, source = ?, validated = ?, validation_log = ? WHERE id = ?", <<a_solution.code, a_solution.source, bool_to_int (a_solution.is_validated), a_solution.validation_log, a_solution.id>>)
 		end
 
 feature {NONE} -- Row Conversion
 
-	task_from_row (row: SIMPLE_SQL_ROW): detachable ROSETTA_TASK
+	task_from_row (a_row: SIMPLE_SQL_ROW): detachable ROSETTA_TASK
 			-- Create task from database `row'.
 		local
 			l_id, l_level: INTEGER
 			l_name, l_description, l_category: STRING
 			l_has_eiffel_int, l_validated_int: INTEGER
 		do
-			l_id := row.integer_value ("id")
-			l_name := row.string_value ("name").to_string_8
-			l_description := row.string_value ("description").to_string_8
-			l_category := row.string_value ("category").to_string_8
-			l_has_eiffel_int := row.integer_value ("has_eiffel")
-			l_validated_int := row.integer_value ("eiffel_validated")
-			l_level := row.integer_value ("eiffel_validation_level")
+			l_id := a_row.integer_value ("id")
+			l_name := a_row.string_value ("name").to_string_8
+			l_description := a_row.string_value ("description").to_string_8
+			l_category := a_row.string_value ("category").to_string_8
+			l_has_eiffel_int := a_row.integer_value ("has_eiffel")
+			l_validated_int := a_row.integer_value ("eiffel_validated")
+			l_level := a_row.integer_value ("eiffel_validation_level")
 
 			if not l_name.is_empty then
 				create Result.make (l_name)
@@ -338,19 +338,19 @@ feature {NONE} -- Row Conversion
 			end
 		end
 
-	solution_from_row (row: SIMPLE_SQL_ROW): detachable ROSETTA_SOLUTION
+	solution_from_row (a_row: SIMPLE_SQL_ROW): detachable ROSETTA_SOLUTION
 			-- Create solution from database `row'.
 		local
 			l_id, l_task_id, l_validated_int: INTEGER
 			l_language, l_code, l_source, l_log: STRING
 		do
-			l_id := row.integer_value ("id")
-			l_task_id := row.integer_value ("task_id")
-			l_language := row.string_value ("language").to_string_8
-			l_code := row.string_value ("code").to_string_8
-			l_source := row.string_value ("source").to_string_8
-			l_validated_int := row.integer_value ("validated")
-			l_log := row.string_value ("validation_log").to_string_8
+			l_id := a_row.integer_value ("id")
+			l_task_id := a_row.integer_value ("task_id")
+			l_language := a_row.string_value ("language").to_string_8
+			l_code := a_row.string_value ("code").to_string_8
+			l_source := a_row.string_value ("source").to_string_8
+			l_validated_int := a_row.integer_value ("validated")
+			l_log := a_row.string_value ("validation_log").to_string_8
 
 			if not l_language.is_empty and not l_code.is_empty then
 				create Result.make (l_task_id, l_language, l_code)
@@ -364,10 +364,10 @@ feature {NONE} -- Row Conversion
 			end
 		end
 
-	bool_to_int (b: BOOLEAN): INTEGER
+	bool_to_int (a_b: BOOLEAN): INTEGER
 			-- Convert boolean to integer (0 or 1)
 		do
-			if b then Result := 1 else Result := 0 end
+			if a_b then Result := 1 else Result := 0 end
 		end
 
 feature {NONE} -- Schema

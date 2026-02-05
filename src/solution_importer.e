@@ -112,18 +112,18 @@ feature -- Import
 
 feature {NONE} -- Extraction
 
-	extract_rosetta_task (code: STRING): STRING
+	extract_rosetta_task (a_code: STRING): STRING
 			-- Extract rosetta_task from note clause.
 		local
 			i, j: INTEGER
 		do
-			i := code.substring_index ("rosetta_task:", 1)
+			i := a_code.substring_index ("rosetta_task:", 1)
 			if i > 0 then
-				i := code.index_of ('"', i)
+				i := a_code.index_of ('"', i)
 				if i > 0 then
-					j := code.index_of ('"', i + 1)
+					j := a_code.index_of ('"', i + 1)
 					if j > i then
-						Result := code.substring (i + 1, j - 1)
+						Result := a_code.substring (i + 1, j - 1)
 					else
 						create Result.make_empty
 					end
@@ -135,24 +135,24 @@ feature {NONE} -- Extraction
 			end
 		end
 
-	extract_class_name (code: STRING): STRING
+	extract_class_name (a_code: STRING): STRING
 			-- Extract class name from code.
 		local
 			i, j: INTEGER
 		do
-			i := code.substring_index ("%Nclass%N", 1)
+			i := a_code.substring_index ("%Nclass%N", 1)
 			if i > 0 then
 				i := i + 7  -- Skip past "class\n"
 				-- Skip whitespace
-				from until i > code.count or else not code.item (i).is_space loop
+				from until i > a_code.count or else not a_code.item (i).is_space loop
 					i := i + 1
 				end
 				j := i
-				from until j > code.count or else code.item (j).is_space or else code.item (j) = '%N' loop
+				from until j > a_code.count or else a_code.item (j).is_space or else a_code.item (j) = '%N' loop
 					j := j + 1
 				end
 				if j > i then
-					Result := code.substring (i, j - 1)
+					Result := a_code.substring (i, j - 1)
 				else
 					create Result.make_empty
 				end
@@ -161,28 +161,28 @@ feature {NONE} -- Extraction
 			end
 		end
 
-	extract_description (code: STRING): STRING
+	extract_description (a_code: STRING): STRING
 			-- Extract description from note clause.
 		local
 			i, j: INTEGER
 		do
-			i := code.substring_index ("description:", 1)
+			i := a_code.substring_index ("description:", 1)
 			if i > 0 then
-				i := code.index_of ('"', i)
+				i := a_code.index_of ('"', i)
 				if i > 0 then
 					-- Check for multi-line string
-					if i + 1 <= code.count and then code.item (i + 1) = '[' then
-						j := code.substring_index ("]%"", i)
+					if i + 1 <= a_code.count and then a_code.item (i + 1) = '[' then
+						j := a_code.substring_index ("]%"", i)
 						if j > i then
-							Result := code.substring (i + 2, j - 1)
+							Result := a_code.substring (i + 2, j - 1)
 							Result.prune_all ('%T')
 						else
 							create Result.make_empty
 						end
 					else
-						j := code.index_of ('"', i + 1)
+						j := a_code.index_of ('"', i + 1)
 						if j > i then
-							Result := code.substring (i + 1, j - 1)
+							Result := a_code.substring (i + 1, j - 1)
 						else
 							create Result.make_empty
 						end
@@ -213,7 +213,7 @@ feature {NONE} -- Extraction
 
 feature {NONE} -- Directory scanning
 
-	eiffel_files (dir: DIRECTORY): ARRAYED_LIST [STRING]
+	eiffel_files (a_dir: DIRECTORY): ARRAYED_LIST [STRING]
 			-- List of .e files in directory.
 		local
 			entries: ARRAYED_LIST [PATH]
@@ -221,8 +221,8 @@ feature {NONE} -- Directory scanning
 			i: INTEGER
 		do
 			create Result.make (20)
-			dir.open_read
-			entries := dir.entries
+			a_dir.open_read
+			entries := a_dir.entries
 			from i := 1 until i > entries.count loop
 				entry_name := entries.i_th (i).name.to_string_8
 				if entry_name.count > 2 and then entry_name.ends_with (".e") then
@@ -230,7 +230,7 @@ feature {NONE} -- Directory scanning
 				end
 				i := i + 1
 			end
-			dir.close
+			a_dir.close
 		end
 
 end

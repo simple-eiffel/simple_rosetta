@@ -46,7 +46,7 @@ feature {NONE} -- Initialization
 
 			-- Recursive delete would require traversing directory
 			print ("%NNote: Eiffel doesn't have built-in recursive delete%N")
-			print ("Use DIRECTORY.linear_representation to traverse and delete%N")
+			print ("Use DIRECTORY.entries to traverse and delete%N")
 		end
 
 end
