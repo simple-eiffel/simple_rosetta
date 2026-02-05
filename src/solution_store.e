@@ -70,7 +70,7 @@ feature -- Queries
 	solution_count: INTEGER
 			-- Number of stored solutions.
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 		do
 			sql_result := db.query ("SELECT COUNT(*) as cnt FROM solutions")
 			if not sql_result.is_empty then
@@ -83,7 +83,7 @@ feature -- Queries
 		require
 			valid_tier: a_tier >= 1 and a_tier <= 4
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 			i: INTEGER
 		do
 			create Result.make (20)
@@ -103,7 +103,7 @@ feature -- Queries
 		require
 			valid_task: not a_task.is_empty
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 		do
 			sql_result := db.query_with_args ("SELECT source_code FROM solutions WHERE task_name = ?", <<a_task>>)
 			if not sql_result.is_empty then
@@ -116,8 +116,8 @@ feature -- Queries
 		require
 			valid_keyword: not a_keyword.is_empty
 		local
-			sql_result: SIMPLE_SQL_RESULT
-			pattern: STRING
+			l_sql_result: SIMPLE_SQL_RESULT
+			l_pattern: STRING
 			i: INTEGER
 		do
 			create Result.make (10)
@@ -136,7 +136,7 @@ feature -- Queries
 	tier_summary: ARRAYED_LIST [TUPLE [tier: INTEGER; solution_count: INTEGER]]
 			-- Count of solutions per tier.
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 			i: INTEGER
 		do
 			create Result.make (4)
@@ -155,7 +155,7 @@ feature -- Wiki Format
 	solution_as_wiki (a_task: STRING): detachable STRING
 			-- Format solution for Rosetta Code wiki.
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 			code, desc: STRING
 		do
 			sql_result := db.query_with_args ("SELECT source_code, description FROM solutions WHERE task_name = ?", <<a_task>>)

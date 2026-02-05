@@ -91,7 +91,7 @@ feature -- Import Operations
 	import_all_tasks
 			-- Import all task names from Rosetta Code.
 		local
-			tasks: ARRAYED_LIST [ROSETTA_TASK]
+			l_tasks: ARRAYED_LIST [ROSETTA_TASK]
 			count, i: INTEGER
 		do
 			last_error.wipe_out
@@ -119,10 +119,10 @@ feature -- Import Operations
 		require
 			name_not_empty: not a_task_name.is_empty
 		local
-			content: detachable STRING
-			task: ROSETTA_TASK
-			solutions: ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
-			solution: ROSETTA_SOLUTION
+			l_content: detachable STRING
+			l_task: ROSETTA_TASK
+			l_solutions: ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
+			l_solution: ROSETTA_SOLUTION
 			i: INTEGER
 		do
 			last_error.wipe_out
@@ -131,9 +131,9 @@ feature -- Import Operations
 			content := client.fetch_task_content (a_task_name)
 			if client.has_error then
 				last_error := client.last_error
-			elseif attached content as c then
+			elseif attached content as al_c then
 				-- Create or update task
-				if attached store.find_task_by_name (a_task_name) as existing then
+				if attached store.find_task_by_name (a_task_name) as al_existing then
 					task := existing
 				else
 					create task.make (a_task_name)
@@ -146,7 +146,7 @@ feature -- Import Operations
 
 				-- First pass: add languages to task
 				from i := 1 until i > solutions.count loop
-					if attached {STRING} solutions.i_th (i).language as l then
+					if attached {STRING} solutions.i_th (i).language as al_l then
 						task.add_language (l)
 					end
 					i := i + 1
@@ -158,8 +158,8 @@ feature -- Import Operations
 				-- Save solutions with correct task_id
 				if task.id > 0 then
 					from i := 1 until i > solutions.count loop
-						if attached {STRING} solutions.i_th (i).language as l then
-							if attached {STRING} solutions.i_th (i).code as co then
+						if attached {STRING} solutions.i_th (i).language as al_l then
+							if attached {STRING} solutions.i_th (i).code as al_co then
 								create solution.make (task.id, l, co)
 								store.save_solution (solution)
 							end
@@ -179,7 +179,7 @@ feature -- Import Operations
 		require
 			positive_limit: a_limit > 0
 		local
-			tasks: ARRAYED_LIST [ROSETTA_TASK]
+			l_tasks: ARRAYED_LIST [ROSETTA_TASK]
 			count, i: INTEGER
 		do
 			last_error.wipe_out
@@ -236,8 +236,8 @@ feature -- Query Operations
 			name_not_empty: not a_task_name.is_empty
 		do
 			create Result.make (10)
-			if attached store.find_task_by_name (a_task_name) as task then
-				Result := store.solutions_for_task (task.id)
+			if attached store.find_task_by_name (a_task_name) as al_task then
+				Result := store.solutions_for_task (al_task.id)
 			end
 		end
 
@@ -246,8 +246,8 @@ feature -- Query Operations
 		require
 			name_not_empty: not a_task_name.is_empty
 		do
-			if attached store.find_task_by_name (a_task_name) as task then
-				Result := store.eiffel_solution_for_task (task.id)
+			if attached store.find_task_by_name (a_task_name) as al_task then
+				Result := store.eiffel_solution_for_task (al_task.id)
 			end
 		end
 
@@ -259,7 +259,7 @@ feature -- Comparison
 			name_not_empty: not a_task_name.is_empty
 			languages_not_empty: not languages.is_empty
 		local
-			solutions: ARRAYED_LIST [ROSETTA_SOLUTION]
+			l_solutions: ARRAYED_LIST [ROSETTA_SOLUTION]
 			i, j: INTEGER
 		do
 			create Result.make (2000)
@@ -288,10 +288,10 @@ feature -- Export
 		require
 			path_not_empty: not a_path.is_empty
 		local
-			file: PLAIN_TEXT_FILE
-			tasks: ARRAYED_LIST [ROSETTA_TASK]
+			l_file: PLAIN_TEXT_FILE
+			l_tasks: ARRAYED_LIST [ROSETTA_TASK]
 			i: INTEGER
-			task: ROSETTA_TASK
+			l_task: ROSETTA_TASK
 		do
 			last_error.wipe_out
 			tasks := store.all_tasks

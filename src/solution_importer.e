@@ -54,11 +54,11 @@ feature -- Import
 			valid_tier: a_tier >= 1 and a_tier <= 4
 			valid_subdir: not a_subdir.is_empty
 		local
-			dir: DIRECTORY
-			dir_path: STRING
-			files: ARRAYED_LIST [STRING]
+			l_dir: DIRECTORY
+			l_dir_path: STRING
+			l_files: ARRAYED_LIST [STRING]
 			i: INTEGER
-			f: STRING
+			l_f: STRING
 		do
 			dir_path := base_path + "/" + a_subdir
 			create dir.make (dir_path)
@@ -80,9 +80,9 @@ feature -- Import
 			valid_tier: a_tier >= 1 and a_tier <= 4
 			valid_path: a_file_path /= Void and then not a_file_path.is_empty
 		local
-			file: PLAIN_TEXT_FILE
+			l_file: PLAIN_TEXT_FILE
 			code, task, class_name, desc, url, file_name: STRING
-			line: STRING
+			l_line: STRING
 		do
 			create file.make_with_name (a_file_path)
 			if file.exists then
@@ -216,8 +216,8 @@ feature {NONE} -- Directory scanning
 	eiffel_files (a_dir: DIRECTORY): ARRAYED_LIST [STRING]
 			-- List of .e files in directory.
 		local
-			entries: ARRAYED_LIST [PATH]
-			entry_name: STRING
+			l_entries: ARRAYED_LIST [PATH]
+			l_entry_name: STRING
 			i: INTEGER
 		do
 			create Result.make (20)

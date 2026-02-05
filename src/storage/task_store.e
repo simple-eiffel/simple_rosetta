@@ -67,7 +67,7 @@ feature -- Statistics
 	task_count: INTEGER
 			-- Total number of tasks
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 		do
 			sql_result := db.query ("SELECT COUNT(*) as cnt FROM tasks")
 			if not sql_result.is_empty then
@@ -78,7 +78,7 @@ feature -- Statistics
 	eiffel_count: INTEGER
 			-- Number of tasks with Eiffel solutions
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 		do
 			sql_result := db.query ("SELECT COUNT(*) as cnt FROM tasks WHERE has_eiffel = 1")
 			if not sql_result.is_empty then
@@ -89,7 +89,7 @@ feature -- Statistics
 	validated_count: INTEGER
 			-- Number of tasks with validated Eiffel solutions
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 		do
 			sql_result := db.query ("SELECT COUNT(*) as cnt FROM tasks WHERE eiffel_validated = 1")
 			if not sql_result.is_empty then
@@ -100,7 +100,7 @@ feature -- Statistics
 	solution_count: INTEGER
 			-- Total number of solutions
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 		do
 			sql_result := db.query ("SELECT COUNT(*) as cnt FROM solutions")
 			if not sql_result.is_empty then
@@ -128,7 +128,7 @@ feature -- Task Operations
 		require
 			name_not_empty: not a_name.is_empty
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 		do
 			sql_result := db.query_with_args ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE name = ?", <<a_name>>)
 			if not sql_result.is_empty then
@@ -141,7 +141,7 @@ feature -- Task Operations
 		require
 			positive_id: a_id > 0
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 		do
 			sql_result := db.query_with_args ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE id = ?", <<a_id>>)
 			if not sql_result.is_empty then
@@ -152,13 +152,13 @@ feature -- Task Operations
 	all_tasks: ARRAYED_LIST [ROSETTA_TASK]
 			-- All tasks in database.
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 			i: INTEGER
 		do
 			create Result.make (1500)
 			sql_result := db.query ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks ORDER BY name")
 			from i := 1 until i > sql_result.count loop
-				if attached task_from_row (sql_result.item (i)) as task then
+				if attached task_from_row (sql_result.item (i)) as al_task then
 					Result.extend (task)
 				end
 				i := i + 1
@@ -168,13 +168,13 @@ feature -- Task Operations
 	tasks_without_eiffel: ARRAYED_LIST [ROSETTA_TASK]
 			-- Tasks that do not have Eiffel solutions.
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 			i: INTEGER
 		do
 			create Result.make (1200)
 			sql_result := db.query ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE has_eiffel = 0 ORDER BY name")
 			from i := 1 until i > sql_result.count loop
-				if attached task_from_row (sql_result.item (i)) as task then
+				if attached task_from_row (sql_result.item (i)) as al_task then
 					Result.extend (task)
 				end
 				i := i + 1
@@ -184,13 +184,13 @@ feature -- Task Operations
 	tasks_with_eiffel: ARRAYED_LIST [ROSETTA_TASK]
 			-- Tasks that have Eiffel solutions.
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 			i: INTEGER
 		do
 			create Result.make (200)
 			sql_result := db.query ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE has_eiffel = 1 ORDER BY name")
 			from i := 1 until i > sql_result.count loop
-				if attached task_from_row (sql_result.item (i)) as task then
+				if attached task_from_row (sql_result.item (i)) as al_task then
 					Result.extend (task)
 				end
 				i := i + 1
@@ -202,15 +202,15 @@ feature -- Task Operations
 		require
 			query_not_empty: not a_query.is_empty
 		local
-			sql_result: SIMPLE_SQL_RESULT
-			pattern: STRING
+			l_sql_result: SIMPLE_SQL_RESULT
+			l_pattern: STRING
 			i: INTEGER
 		do
 			create Result.make (100)
 			pattern := "%%" + a_query + "%%"
 			sql_result := db.query_with_args ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE name LIKE ? OR description LIKE ? ORDER BY name", <<pattern, pattern>>)
 			from i := 1 until i > sql_result.count loop
-				if attached task_from_row (sql_result.item (i)) as task then
+				if attached task_from_row (sql_result.item (i)) as al_task then
 					Result.extend (task)
 				end
 				i := i + 1
@@ -238,7 +238,7 @@ feature -- Solution Operations
 			valid_task_id: a_task_id > 0
 			language_not_empty: not a_language.is_empty
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 		do
 			sql_result := db.query_with_args ("SELECT id, task_id, language, code, source, validated, validation_log FROM solutions WHERE task_id = ? AND language = ?", <<a_task_id, a_language>>)
 			if not sql_result.is_empty then
@@ -251,13 +251,13 @@ feature -- Solution Operations
 		require
 			valid_task_id: a_task_id > 0
 		local
-			sql_result: SIMPLE_SQL_RESULT
+			l_sql_result: SIMPLE_SQL_RESULT
 			i: INTEGER
 		do
 			create Result.make (10)
 			sql_result := db.query_with_args ("SELECT id, task_id, language, code, source, validated, validation_log FROM solutions WHERE task_id = ? ORDER BY language", <<a_task_id>>)
 			from i := 1 until i > sql_result.count loop
-				if attached solution_from_row (sql_result.item (i)) as sol then
+				if attached solution_from_row (sql_result.item (i)) as al_sol then
 					Result.extend (sol)
 				end
 				i := i + 1

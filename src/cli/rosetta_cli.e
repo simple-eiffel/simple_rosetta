@@ -34,7 +34,7 @@ feature -- Commands
 	process_command
 			-- Process the command line arguments.
 		local
-			cmd: STRING_32
+			l_cmd: STRING_32
 		do
 			cmd := argument (1)
 			if cmd.same_string ("wiki") then
@@ -60,8 +60,8 @@ feature -- Commands
 	cmd_wiki
 			-- Generate wiki format for a task.
 		local
-			task_name: STRING
-			wiki: detachable STRING
+			l_task_name: STRING
+			l_wiki: detachable STRING
 		do
 			if argument_count < 2 then
 				print ("Usage: rosetta wiki <task_name>%N")
@@ -69,7 +69,7 @@ feature -- Commands
 			else
 				task_name := argument (2).to_string_8
 				wiki := store.solution_as_wiki (task_name)
-				if attached wiki as w then
+				if attached wiki as al_w then
 					print (w)
 					print ("%N%N-- Copy the above to Rosetta Code wiki --%N")
 				else
@@ -82,8 +82,8 @@ feature -- Commands
 	cmd_search
 			-- Search for solutions.
 		local
-			keyword: STRING
-			results: ARRAYED_LIST [TUPLE [task: STRING; tier: INTEGER; class_name: STRING]]
+			l_keyword: STRING
+			l_results: ARRAYED_LIST [TUPLE [task: STRING; tier: INTEGER; class_name: STRING]]
 			i: INTEGER
 		do
 			if argument_count < 2 then
@@ -107,8 +107,8 @@ feature -- Commands
 	cmd_list
 			-- List solutions by tier.
 		local
-			tier: INTEGER
-			solutions: ARRAYED_LIST [TUPLE [task: STRING; class_name: STRING; file: STRING]]
+			l_tier: INTEGER
+			l_solutions: ARRAYED_LIST [TUPLE [task: STRING; class_name: STRING; file: STRING]]
 			i: INTEGER
 		do
 			if argument_count >= 2 and then argument (2).is_integer then
@@ -133,7 +133,7 @@ feature -- Commands
 	cmd_missing
 			-- Show tasks missing Eiffel solutions.
 		local
-			easy_only: BOOLEAN
+			l_easy_only: BOOLEAN
 		do
 			easy_only := argument_count >= 2 and then
 				(argument (2).same_string ("--easy") or argument (2).same_string ("-e"))
@@ -148,7 +148,7 @@ feature -- Commands
 	cmd_validate
 			-- Validate solutions compile correctly.
 		local
-			task_name: STRING
+			l_task_name: STRING
 		do
 			if argument_count >= 2 then
 				task_name := argument (2).to_string_8
@@ -191,7 +191,7 @@ feature {NONE} -- Implementation
 	show_tier_summary
 			-- Display tier summary.
 		local
-			summary: ARRAYED_LIST [TUPLE [tier: INTEGER; solution_count: INTEGER]]
+			l_summary: ARRAYED_LIST [TUPLE [tier: INTEGER; solution_count: INTEGER]]
 			i: INTEGER
 		do
 			summary := store.tier_summary
@@ -228,10 +228,10 @@ feature {NONE} -- Implementation
 	validate_single (a_task: STRING)
 			-- Validate a single solution.
 		local
-			code: detachable STRING
+			l_code: detachable STRING
 		do
 			code := store.get_solution_code (a_task)
-			if attached code as c then
+			if attached code as al_c then
 				print ("Validating: " + a_task + "%N")
 				if validator.validate_code (c) then
 					print ("  [PASS] Solution compiles correctly%N")
@@ -246,8 +246,8 @@ feature {NONE} -- Implementation
 	validate_all
 			-- Validate all solutions.
 		local
-			summary: ARRAYED_LIST [TUPLE [tier: INTEGER; solution_count: INTEGER]]
-			solutions: ARRAYED_LIST [TUPLE [task: STRING; class_name: STRING; file: STRING]]
+			l_summary: ARRAYED_LIST [TUPLE [tier: INTEGER; solution_count: INTEGER]]
+			l_solutions: ARRAYED_LIST [TUPLE [task: STRING; class_name: STRING; file: STRING]]
 			i, j, passed, failed: INTEGER
 		do
 			print ("Validating all solutions...%N%N")

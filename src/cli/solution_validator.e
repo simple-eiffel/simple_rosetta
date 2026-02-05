@@ -60,10 +60,10 @@ feature -- Validation
 		require
 			file_name_not_empty: not a_file_name.is_empty
 		local
-			full_path: STRING
-			file: PLAIN_TEXT_FILE
-			code: STRING
-			line: STRING
+			l_full_path: STRING
+			l_file: PLAIN_TEXT_FILE
+			l_code: STRING
+			l_line: STRING
 		do
 			last_error.wipe_out
 			Result := False
@@ -113,7 +113,7 @@ feature {NONE} -- Implementation
 		local
 			feature_count, end_count: INTEGER
 			i: INTEGER
-			lines: LIST [STRING]
+			l_lines: LIST [STRING]
 		do
 			lines := a_code.split ('%N')
 			from i := 1 until i > lines.count loop
@@ -139,10 +139,10 @@ feature {NONE} -- Implementation
 	find_solution_file (a_file_name: STRING): STRING
 			-- Find solution file in tier directories.
 		local
-			tiers: ARRAY [STRING]
+			l_tiers: ARRAY [STRING]
 			i: INTEGER
-			path: STRING
-			file: PLAIN_TEXT_FILE
+			l_path: STRING
+			l_file: PLAIN_TEXT_FILE
 		do
 			create Result.make_empty
 			tiers := <<"tier1_trivial", "tier2_easy", "tier3_moderate", "tier4_complex">>

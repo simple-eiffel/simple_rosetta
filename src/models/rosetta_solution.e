@@ -188,7 +188,7 @@ feature -- Output
 		require
 			positive_max: a_max_lines > 0
 		local
-			lines: INTEGER
+			l_lines: INTEGER
 			i: INTEGER
 		do
 			create Result.make (200)

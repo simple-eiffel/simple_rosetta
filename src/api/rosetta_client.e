@@ -44,9 +44,9 @@ feature -- API Operations
 	fetch_all_task_names: ARRAYED_LIST [ROSETTA_TASK]
 			-- Fetch all task names from Rosetta Code.
 		local
-			continue_token: detachable STRING
-			batch: ARRAYED_LIST [ROSETTA_TASK]
-			done: BOOLEAN
+			l_continue_token: detachable STRING
+			l_batch: ARRAYED_LIST [ROSETTA_TASK]
+			l_done: BOOLEAN
 		do
 			create Result.make (1500)
 			last_error.wipe_out
@@ -74,8 +74,8 @@ feature -- API Operations
 		require
 			name_not_empty: not a_task_name.is_empty
 		local
-			url: STRING
-			encoded_name: STRING
+			l_url: STRING
+			l_encoded_name: STRING
 		do
 			last_error.wipe_out
 			encoded_name := url_encode (a_task_name)
@@ -93,8 +93,8 @@ feature -- API Operations
 		require
 			name_not_empty: not a_task_name.is_empty
 		local
-			content: detachable STRING
-			solutions: ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
+			l_content: detachable STRING
+			l_solutions: ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
 			i: INTEGER
 		do
 			content := fetch_task_content (a_task_name)
@@ -104,7 +104,7 @@ feature -- API Operations
 
 				solutions := wiki_parser.extract_solutions (c)
 				from i := 1 until i > solutions.count loop
-					if attached {STRING} solutions.i_th (i).language as lang then
+					if attached {STRING} solutions.i_th (i).language as al_lang then
 						Result.add_language (lang)
 					end
 					i := i + 1
@@ -117,9 +117,9 @@ feature {NONE} -- Implementation
 	fetch_task_batch (a_continue_token: detachable STRING): ARRAYED_LIST [ROSETTA_TASK]
 			-- Fetch a batch of up to 500 tasks.
 		local
-			url: STRING
-			json_value: detachable SIMPLE_JSON_VALUE
-			response: detachable STRING
+			l_url: STRING
+			l_json_value: detachable SIMPLE_JSON_VALUE
+			l_response: detachable STRING
 		do
 			create Result.make (500)
 			last_continue_token := Void
@@ -129,7 +129,7 @@ feature {NONE} -- Implementation
 			url.append ("&cmtitle=Category:Programming_Tasks")
 			url.append ("&cmlimit=500&format=json")
 
-			if attached a_continue_token as ct then
+			if attached a_continue_token as al_ct then
 				url.append ("&cmcontinue=")
 				url.append (url_encode (ct))
 			end
@@ -153,9 +153,9 @@ feature {NONE} -- Implementation
 	parse_task_batch (a_json: SIMPLE_JSON_VALUE): ARRAYED_LIST [ROSETTA_TASK]
 			-- Parse task batch from API 'json' response.
 		local
-			task: ROSETTA_TASK
-			members: detachable SIMPLE_JSON_ARRAY
-			member: SIMPLE_JSON_VALUE
+			l_task: ROSETTA_TASK
+			l_members: detachable SIMPLE_JSON_ARRAY
+			l_member: SIMPLE_JSON_VALUE
 			i: INTEGER
 			root_obj, member_obj: detachable SIMPLE_JSON_OBJECT
 		do
@@ -165,22 +165,22 @@ feature {NONE} -- Implementation
 				root_obj := a_json.as_object
 
 				-- Extract continue token if present
-				if attached root_obj.object_item ("continue") as cont then
-					if attached cont.string_item ("cmcontinue") as cm then
+				if attached root_obj.object_item ("continue") as al_cont then
+					if attached al_cont.string_item ("cmcontinue") as al_cm then
 						last_continue_token := safe_to_string_8 (cm)
 					end
 				end
 
 				-- Extract tasks from query.categorymembers
-				if attached root_obj.object_item ("query") as query then
-					members := query.array_item ("categorymembers")
-					if attached members as mems then
+				if attached root_obj.object_item ("query") as al_query then
+					members := al_query.array_item ("categorymembers")
+					if attached members as al_mems then
 						from i := 1 until i > mems.count loop
 							member := mems.item (i)
 							if member.is_object then
 								member_obj := member.as_object
-								if attached member_obj.string_item ("title") as title_val then
-									if attached member_obj.string_item ("pageid") as pid then
+								if attached member_obj.string_item ("title") as al_title_val then
+									if attached member_obj.string_item ("pageid") as al_pid then
 										create task.make_from_api (safe_to_string_8 (title_val), safe_to_string_8 (pid))
 									else
 										create task.make (safe_to_string_8 (title_val))
@@ -198,8 +198,8 @@ feature {NONE} -- Implementation
 	curl_get (a_url: STRING): detachable STRING
 			-- Fetch URL content using curl command (supports HTTPS).
 		local
-			proc: SIMPLE_PROCESS
-			cmd: STRING
+			l_proc: SIMPLE_PROCESS
+			l_cmd: STRING
 			l_output: STRING_32
 		do
 			create proc.make
