@@ -194,17 +194,17 @@ feature -- Output
 			create Result.make (200)
 			from
 				i := 1
-				lines := 0
+				l_lines := 0
 			until
-				i > code.count or lines >= a_max_lines
+				i > code.count or l_lines >= a_max_lines
 			loop
 				if code.item (i) = '%N' then
-					lines := lines + 1
+					l_lines := l_lines + 1
 				end
 				Result.append_character (code.item (i))
 				i := i + 1
 			end
-			if lines >= a_max_lines and i <= code.count then
+			if l_lines >= a_max_lines and i <= code.count then
 				Result.append ("%N... (")
 				Result.append_integer (line_count - a_max_lines)
 				Result.append (" more lines)")

@@ -72,9 +72,9 @@ feature -- Queries
 		local
 			l_sql_result: SIMPLE_SQL_RESULT
 		do
-			sql_result := db.query ("SELECT COUNT(*) as cnt FROM solutions")
-			if not sql_result.is_empty then
-				Result := sql_result.first.integer_value ("cnt")
+			l_sql_result := db.query ("SELECT COUNT(*) as cnt FROM solutions")
+			if not l_sql_result.is_empty then
+				Result := l_sql_result.first.integer_value ("cnt")
 			end
 		end
 
@@ -87,12 +87,12 @@ feature -- Queries
 			i: INTEGER
 		do
 			create Result.make (20)
-			sql_result := db.query_with_args ("SELECT task_name, class_name, file_name FROM solutions WHERE tier = ? ORDER BY task_name", <<a_tier>>)
-			from i := 1 until i > sql_result.count loop
+			l_sql_result := db.query_with_args ("SELECT task_name, class_name, file_name FROM solutions WHERE tier = ? ORDER BY task_name", <<a_tier>>)
+			from i := 1 until i > l_sql_result.count loop
 				Result.extend ([
-					sql_result.item (i).string_value ("task_name").to_string_8,
-					sql_result.item (i).string_value ("class_name").to_string_8,
-					sql_result.item (i).string_value ("file_name").to_string_8
+					l_sql_result.item (i).string_value ("task_name").to_string_8,
+					l_sql_result.item (i).string_value ("class_name").to_string_8,
+					l_sql_result.item (i).string_value ("file_name").to_string_8
 				])
 				i := i + 1
 			end
@@ -105,9 +105,9 @@ feature -- Queries
 		local
 			l_sql_result: SIMPLE_SQL_RESULT
 		do
-			sql_result := db.query_with_args ("SELECT source_code FROM solutions WHERE task_name = ?", <<a_task>>)
-			if not sql_result.is_empty then
-				Result := sql_result.first.string_value ("source_code").to_string_8
+			l_sql_result := db.query_with_args ("SELECT source_code FROM solutions WHERE task_name = ?", <<a_task>>)
+			if not l_sql_result.is_empty then
+				Result := l_sql_result.first.string_value ("source_code").to_string_8
 			end
 		end
 
@@ -121,13 +121,13 @@ feature -- Queries
 			i: INTEGER
 		do
 			create Result.make (10)
-			pattern := "%%" + a_keyword + "%%"
-			sql_result := db.query_with_args ("SELECT task_name, tier, class_name FROM solutions WHERE task_name LIKE ? OR description LIKE ? ORDER BY tier, task_name", <<pattern, pattern>>)
-			from i := 1 until i > sql_result.count loop
+			l_pattern := "%%" + a_keyword + "%%"
+			l_sql_result := db.query_with_args ("SELECT task_name, tier, class_name FROM solutions WHERE task_name LIKE ? OR description LIKE ? ORDER BY tier, task_name", <<l_pattern, l_pattern>>)
+			from i := 1 until i > l_sql_result.count loop
 				Result.extend ([
-					sql_result.item (i).string_value ("task_name").to_string_8,
-					sql_result.item (i).integer_value ("tier"),
-					sql_result.item (i).string_value ("class_name").to_string_8
+					l_sql_result.item (i).string_value ("task_name").to_string_8,
+					l_sql_result.item (i).integer_value ("tier"),
+					l_sql_result.item (i).string_value ("class_name").to_string_8
 				])
 				i := i + 1
 			end
@@ -140,11 +140,11 @@ feature -- Queries
 			i: INTEGER
 		do
 			create Result.make (4)
-			sql_result := db.query ("SELECT tier, COUNT(*) as cnt FROM solutions GROUP BY tier ORDER BY tier")
-			from i := 1 until i > sql_result.count loop
+			l_sql_result := db.query ("SELECT tier, COUNT(*) as cnt FROM solutions GROUP BY tier ORDER BY tier")
+			from i := 1 until i > l_sql_result.count loop
 				Result.extend ([
-					sql_result.item (i).integer_value ("tier"),
-					sql_result.item (i).integer_value ("cnt")
+					l_sql_result.item (i).integer_value ("tier"),
+					l_sql_result.item (i).integer_value ("cnt")
 				])
 				i := i + 1
 			end
@@ -158,10 +158,10 @@ feature -- Wiki Format
 			l_sql_result: SIMPLE_SQL_RESULT
 			code, desc: STRING
 		do
-			sql_result := db.query_with_args ("SELECT source_code, description FROM solutions WHERE task_name = ?", <<a_task>>)
-			if not sql_result.is_empty then
-				code := sql_result.first.string_value ("source_code").to_string_8
-				desc := sql_result.first.string_value ("description").to_string_8
+			l_sql_result := db.query_with_args ("SELECT source_code, description FROM solutions WHERE task_name = ?", <<a_task>>)
+			if not l_sql_result.is_empty then
+				code := l_sql_result.first.string_value ("source_code").to_string_8
+				desc := l_sql_result.first.string_value ("description").to_string_8
 				create Result.make (code.count + 200)
 				Result.append ("=={{header|Eiffel}}==%N")
 				if not desc.is_empty then

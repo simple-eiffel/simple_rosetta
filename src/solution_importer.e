@@ -60,14 +60,14 @@ feature -- Import
 			i: INTEGER
 			l_f: STRING
 		do
-			dir_path := base_path + "/" + a_subdir
-			create dir.make (dir_path)
-			if dir.exists then
-				files := eiffel_files (dir)
-				from i := 1 until i > files.count loop
-					f := files.i_th (i)
-					if not f.same_string ("solutions_validator.e") then
-						import_file (a_tier, dir_path + "/" + f)
+			l_dir_path := base_path + "/" + a_subdir
+			create l_dir.make (l_dir_path)
+			if l_dir.exists then
+				l_files := eiffel_files (l_dir)
+				from i := 1 until i > l_files.count loop
+					l_f := l_files.i_th (i)
+					if not l_f.same_string ("solutions_validator.e") then
+						import_file (a_tier, l_dir_path + "/" + l_f)
 					end
 					i := i + 1
 				end
@@ -84,17 +84,17 @@ feature -- Import
 			code, task, class_name, desc, url, file_name: STRING
 			l_line: STRING
 		do
-			create file.make_with_name (a_file_path)
-			if file.exists then
-				file.open_read
+			create l_file.make_with_name (a_file_path)
+			if l_file.exists then
+				l_file.open_read
 				create code.make (2000)
-				from until file.end_of_file loop
-					file.read_line
-					line := file.last_string.twin
-					code.append (line)
+				from until l_file.end_of_file loop
+					l_file.read_line
+					l_line := l_file.last_string.twin
+					code.append (l_line)
 					code.append_character ('%N')
 				end
-				file.close
+				l_file.close
 
 				-- Extract metadata
 				task := extract_rosetta_task (code)
@@ -222,11 +222,11 @@ feature {NONE} -- Directory scanning
 		do
 			create Result.make (20)
 			a_dir.open_read
-			entries := a_dir.entries
-			from i := 1 until i > entries.count loop
-				entry_name := entries.i_th (i).name.to_string_8
-				if entry_name.count > 2 and then entry_name.ends_with (".e") then
-					Result.extend (entry_name)
+			l_entries := a_dir.entries
+			from i := 1 until i > l_entries.count loop
+				l_entry_name := l_entries.i_th (i).name.to_string_8
+				if l_entry_name.count > 2 and then l_entry_name.ends_with (".e") then
+					Result.extend (l_entry_name)
 				end
 				i := i + 1
 			end

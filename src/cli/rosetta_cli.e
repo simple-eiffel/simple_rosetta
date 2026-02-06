@@ -36,23 +36,23 @@ feature -- Commands
 		local
 			l_cmd: STRING_32
 		do
-			cmd := argument (1)
-			if cmd.same_string ("wiki") then
+			l_cmd := argument (1)
+			if l_cmd.same_string ("wiki") then
 				cmd_wiki
-			elseif cmd.same_string ("search") then
+			elseif l_cmd.same_string ("search") then
 				cmd_search
-			elseif cmd.same_string ("list") then
+			elseif l_cmd.same_string ("list") then
 				cmd_list
-			elseif cmd.same_string ("missing") then
+			elseif l_cmd.same_string ("missing") then
 				cmd_missing
-			elseif cmd.same_string ("validate") then
+			elseif l_cmd.same_string ("validate") then
 				cmd_validate
-			elseif cmd.same_string ("stats") then
+			elseif l_cmd.same_string ("stats") then
 				cmd_stats
-			elseif cmd.same_string ("help") or cmd.same_string ("--help") or cmd.same_string ("-h") then
+			elseif l_cmd.same_string ("help") or l_cmd.same_string ("--help") or l_cmd.same_string ("-h") then
 				show_help
 			else
-				print ("Unknown command: " + cmd.to_string_8 + "%N")
+				print ("Unknown command: " + l_cmd.to_string_8 + "%N")
 				show_help
 			end
 		end
@@ -67,14 +67,14 @@ feature -- Commands
 				print ("Usage: rosetta wiki <task_name>%N")
 				print ("Example: rosetta wiki Fibonacci_sequence%N")
 			else
-				task_name := argument (2).to_string_8
-				wiki := store.solution_as_wiki (task_name)
-				if attached wiki as al_w then
+				l_task_name := argument (2).to_string_8
+				l_wiki := store.solution_as_wiki (l_task_name)
+				if attached l_wiki as al_w then
 					print (w)
 					print ("%N%N-- Copy the above to Rosetta Code wiki --%N")
 				else
-					print ("Solution not found: " + task_name + "%N")
-					print ("Use 'rosetta search " + task_name + "' to find similar tasks%N")
+					print ("Solution not found: " + l_task_name + "%N")
+					print ("Use 'rosetta search " + l_task_name + "' to find similar tasks%N")
 				end
 			end
 		end
@@ -90,14 +90,14 @@ feature -- Commands
 				print ("Usage: rosetta search <keyword>%N")
 				print ("Example: rosetta search sort%N")
 			else
-				keyword := argument (2).to_string_8
-				results := store.search_solutions (keyword)
-				if results.is_empty then
-					print ("No solutions found for: " + keyword + "%N")
+				l_keyword := argument (2).to_string_8
+				l_results := store.search_solutions (l_keyword)
+				if l_results.is_empty then
+					print ("No solutions found for: " + l_keyword + "%N")
 				else
-					print ("Found " + results.count.out + " solutions for '" + keyword + "':%N%N")
-					from i := 1 until i > results.count loop
-						print ("  [TIER " + results.i_th (i).tier.out + "] " + results.i_th (i).task + "%N")
+					print ("Found " + l_results.count.out + " solutions for '" + l_keyword + "':%N%N")
+					from i := 1 until i > l_results.count loop
+						print ("  [TIER " + l_results.i_th (i).tier.out + "] " + l_results.i_th (i).task + "%N")
 						i := i + 1
 					end
 				end
@@ -112,12 +112,12 @@ feature -- Commands
 			i: INTEGER
 		do
 			if argument_count >= 2 and then argument (2).is_integer then
-				tier := argument (2).to_integer
-				if tier >= 1 and tier <= 4 then
-					solutions := store.solutions_by_tier (tier)
-					print ("TIER " + tier.out + " Solutions (" + solutions.count.out + "):%N%N")
-					from i := 1 until i > solutions.count loop
-						print ("  " + solutions.i_th (i).task + "%N")
+				l_tier := argument (2).to_integer
+				if l_tier >= 1 and l_tier <= 4 then
+					l_solutions := store.solutions_by_tier (l_tier)
+					print ("TIER " + l_tier.out + " Solutions (" + l_solutions.count.out + "):%N%N")
+					from i := 1 until i > l_solutions.count loop
+						print ("  " + l_solutions.i_th (i).task + "%N")
 						i := i + 1
 					end
 				else
@@ -135,10 +135,10 @@ feature -- Commands
 		local
 			l_easy_only: BOOLEAN
 		do
-			easy_only := argument_count >= 2 and then
+			l_easy_only := argument_count >= 2 and then
 				(argument (2).same_string ("--easy") or argument (2).same_string ("-e"))
 
-			if easy_only then
+			if l_easy_only then
 				show_easy_missing
 			else
 				show_all_missing
@@ -151,8 +151,8 @@ feature -- Commands
 			l_task_name: STRING
 		do
 			if argument_count >= 2 then
-				task_name := argument (2).to_string_8
-				validate_single (task_name)
+				l_task_name := argument (2).to_string_8
+				validate_single (l_task_name)
 			else
 				validate_all
 			end
@@ -194,9 +194,9 @@ feature {NONE} -- Implementation
 			l_summary: ARRAYED_LIST [TUPLE [tier: INTEGER; solution_count: INTEGER]]
 			i: INTEGER
 		do
-			summary := store.tier_summary
-			from i := 1 until i > summary.count loop
-				print ("  TIER " + summary.i_th (i).tier.out + ": " + summary.i_th (i).solution_count.out + " solutions%N")
+			l_summary := store.tier_summary
+			from i := 1 until i > l_summary.count loop
+				print ("  TIER " + l_summary.i_th (i).tier.out + ": " + l_summary.i_th (i).solution_count.out + " solutions%N")
 				i := i + 1
 			end
 		end
@@ -230,8 +230,8 @@ feature {NONE} -- Implementation
 		local
 			l_code: detachable STRING
 		do
-			code := store.get_solution_code (a_task)
-			if attached code as al_c then
+			l_code := store.get_solution_code (a_task)
+			if attached l_code as al_c then
 				print ("Validating: " + a_task + "%N")
 				if validator.validate_code (c) then
 					print ("  [PASS] Solution compiles correctly%N")
@@ -253,17 +253,17 @@ feature {NONE} -- Implementation
 			print ("Validating all solutions...%N%N")
 			passed := 0
 			failed := 0
-			summary := store.tier_summary
+			l_summary := store.tier_summary
 
-			from i := 1 until i > summary.count loop
-				print ("TIER " + summary.i_th (i).tier.out + ":%N")
-				solutions := store.solutions_by_tier (summary.i_th (i).tier)
-				from j := 1 until j > solutions.count loop
-					if validator.validate_file (solutions.i_th (j).file) then
-						print ("  [PASS] " + solutions.i_th (j).task + "%N")
+			from i := 1 until i > l_summary.count loop
+				print ("TIER " + l_summary.i_th (i).tier.out + ":%N")
+				l_solutions := store.solutions_by_tier (l_summary.i_th (i).tier)
+				from j := 1 until j > l_solutions.count loop
+					if validator.validate_file (l_solutions.i_th (j).file) then
+						print ("  [PASS] " + l_solutions.i_th (j).task + "%N")
 						passed := passed + 1
 					else
-						print ("  [FAIL] " + solutions.i_th (j).task + ": " + validator.last_error + "%N")
+						print ("  [FAIL] " + l_solutions.i_th (j).task + ": " + validator.last_error + "%N")
 						failed := failed + 1
 					end
 					j := j + 1

@@ -69,9 +69,9 @@ feature -- Statistics
 		local
 			l_sql_result: SIMPLE_SQL_RESULT
 		do
-			sql_result := db.query ("SELECT COUNT(*) as cnt FROM tasks")
-			if not sql_result.is_empty then
-				Result := sql_result.first.integer_value ("cnt")
+			l_sql_result := db.query ("SELECT COUNT(*) as cnt FROM tasks")
+			if not l_sql_result.is_empty then
+				Result := l_sql_result.first.integer_value ("cnt")
 			end
 		end
 
@@ -80,9 +80,9 @@ feature -- Statistics
 		local
 			l_sql_result: SIMPLE_SQL_RESULT
 		do
-			sql_result := db.query ("SELECT COUNT(*) as cnt FROM tasks WHERE has_eiffel = 1")
-			if not sql_result.is_empty then
-				Result := sql_result.first.integer_value ("cnt")
+			l_sql_result := db.query ("SELECT COUNT(*) as cnt FROM tasks WHERE has_eiffel = 1")
+			if not l_sql_result.is_empty then
+				Result := l_sql_result.first.integer_value ("cnt")
 			end
 		end
 
@@ -91,9 +91,9 @@ feature -- Statistics
 		local
 			l_sql_result: SIMPLE_SQL_RESULT
 		do
-			sql_result := db.query ("SELECT COUNT(*) as cnt FROM tasks WHERE eiffel_validated = 1")
-			if not sql_result.is_empty then
-				Result := sql_result.first.integer_value ("cnt")
+			l_sql_result := db.query ("SELECT COUNT(*) as cnt FROM tasks WHERE eiffel_validated = 1")
+			if not l_sql_result.is_empty then
+				Result := l_sql_result.first.integer_value ("cnt")
 			end
 		end
 
@@ -102,9 +102,9 @@ feature -- Statistics
 		local
 			l_sql_result: SIMPLE_SQL_RESULT
 		do
-			sql_result := db.query ("SELECT COUNT(*) as cnt FROM solutions")
-			if not sql_result.is_empty then
-				Result := sql_result.first.integer_value ("cnt")
+			l_sql_result := db.query ("SELECT COUNT(*) as cnt FROM solutions")
+			if not l_sql_result.is_empty then
+				Result := l_sql_result.first.integer_value ("cnt")
 			end
 		end
 
@@ -130,9 +130,9 @@ feature -- Task Operations
 		local
 			l_sql_result: SIMPLE_SQL_RESULT
 		do
-			sql_result := db.query_with_args ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE name = ?", <<a_name>>)
-			if not sql_result.is_empty then
-				Result := task_from_row (sql_result.first)
+			l_sql_result := db.query_with_args ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE name = ?", <<a_name>>)
+			if not l_sql_result.is_empty then
+				Result := task_from_row (l_sql_result.first)
 			end
 		end
 
@@ -143,9 +143,9 @@ feature -- Task Operations
 		local
 			l_sql_result: SIMPLE_SQL_RESULT
 		do
-			sql_result := db.query_with_args ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE id = ?", <<a_id>>)
-			if not sql_result.is_empty then
-				Result := task_from_row (sql_result.first)
+			l_sql_result := db.query_with_args ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE id = ?", <<a_id>>)
+			if not l_sql_result.is_empty then
+				Result := task_from_row (l_sql_result.first)
 			end
 		end
 
@@ -156,10 +156,10 @@ feature -- Task Operations
 			i: INTEGER
 		do
 			create Result.make (1500)
-			sql_result := db.query ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks ORDER BY name")
-			from i := 1 until i > sql_result.count loop
-				if attached task_from_row (sql_result.item (i)) as al_task then
-					Result.extend (task)
+			l_sql_result := db.query ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks ORDER BY name")
+			from i := 1 until i > l_sql_result.count loop
+				if attached task_from_row (l_sql_result.item (i)) as al_task then
+					Result.extend (al_task)
 				end
 				i := i + 1
 			end
@@ -172,10 +172,10 @@ feature -- Task Operations
 			i: INTEGER
 		do
 			create Result.make (1200)
-			sql_result := db.query ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE has_eiffel = 0 ORDER BY name")
-			from i := 1 until i > sql_result.count loop
-				if attached task_from_row (sql_result.item (i)) as al_task then
-					Result.extend (task)
+			l_sql_result := db.query ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE has_eiffel = 0 ORDER BY name")
+			from i := 1 until i > l_sql_result.count loop
+				if attached task_from_row (l_sql_result.item (i)) as al_task then
+					Result.extend (al_task)
 				end
 				i := i + 1
 			end
@@ -188,10 +188,10 @@ feature -- Task Operations
 			i: INTEGER
 		do
 			create Result.make (200)
-			sql_result := db.query ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE has_eiffel = 1 ORDER BY name")
-			from i := 1 until i > sql_result.count loop
-				if attached task_from_row (sql_result.item (i)) as al_task then
-					Result.extend (task)
+			l_sql_result := db.query ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE has_eiffel = 1 ORDER BY name")
+			from i := 1 until i > l_sql_result.count loop
+				if attached task_from_row (l_sql_result.item (i)) as al_task then
+					Result.extend (al_task)
 				end
 				i := i + 1
 			end
@@ -207,11 +207,11 @@ feature -- Task Operations
 			i: INTEGER
 		do
 			create Result.make (100)
-			pattern := "%%" + a_query + "%%"
-			sql_result := db.query_with_args ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE name LIKE ? OR description LIKE ? ORDER BY name", <<pattern, pattern>>)
-			from i := 1 until i > sql_result.count loop
-				if attached task_from_row (sql_result.item (i)) as al_task then
-					Result.extend (task)
+			l_pattern := "%%" + a_query + "%%"
+			l_sql_result := db.query_with_args ("SELECT id, name, description, category, has_eiffel, eiffel_validated, eiffel_validation_level FROM tasks WHERE name LIKE ? OR description LIKE ? ORDER BY name", <<l_pattern, l_pattern>>)
+			from i := 1 until i > l_sql_result.count loop
+				if attached task_from_row (l_sql_result.item (i)) as al_task then
+					Result.extend (al_task)
 				end
 				i := i + 1
 			end
@@ -240,9 +240,9 @@ feature -- Solution Operations
 		local
 			l_sql_result: SIMPLE_SQL_RESULT
 		do
-			sql_result := db.query_with_args ("SELECT id, task_id, language, code, source, validated, validation_log FROM solutions WHERE task_id = ? AND language = ?", <<a_task_id, a_language>>)
-			if not sql_result.is_empty then
-				Result := solution_from_row (sql_result.first)
+			l_sql_result := db.query_with_args ("SELECT id, task_id, language, code, source, validated, validation_log FROM solutions WHERE task_id = ? AND language = ?", <<a_task_id, a_language>>)
+			if not l_sql_result.is_empty then
+				Result := solution_from_row (l_sql_result.first)
 			end
 		end
 
@@ -255,10 +255,10 @@ feature -- Solution Operations
 			i: INTEGER
 		do
 			create Result.make (10)
-			sql_result := db.query_with_args ("SELECT id, task_id, language, code, source, validated, validation_log FROM solutions WHERE task_id = ? ORDER BY language", <<a_task_id>>)
-			from i := 1 until i > sql_result.count loop
-				if attached solution_from_row (sql_result.item (i)) as al_sol then
-					Result.extend (sol)
+			l_sql_result := db.query_with_args ("SELECT id, task_id, language, code, source, validated, validation_log FROM solutions WHERE task_id = ? ORDER BY language", <<a_task_id>>)
+			from i := 1 until i > l_sql_result.count loop
+				if attached solution_from_row (l_sql_result.item (i)) as al_sol then
+					Result.extend (al_sol)
 				end
 				i := i + 1
 			end

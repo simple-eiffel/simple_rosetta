@@ -20,9 +20,9 @@ feature -- Parsing
 		local
 			l_header_pos: INTEGER
 		do
-			header_pos := a_wiki_content.substring_index ("=={{header|", 1)
-			if header_pos > 1 then
-				Result := a_wiki_content.substring (1, header_pos - 1)
+			l_header_pos := a_wiki_content.substring_index ("=={{header|", 1)
+			if l_header_pos > 1 then
+				Result := a_wiki_content.substring (1, l_header_pos - 1)
 				Result := clean_wiki_markup (Result)
 			else
 				create Result.make_empty
@@ -42,16 +42,16 @@ feature -- Parsing
 			l_lang: STRING_32
 		do
 			create Result.make (20)
-			create regex.make
+			create l_regex.make
 
-			regex.compile (Header_pattern)
-			if regex.is_compiled then
-				matches := regex.matches (a_wiki_content)
-				from i := 1 until i > matches.count loop
-					if attached matches.item (i).group (1) as al_g then
-						lang := al_g.to_string_32
-						if not Result.has (lang.to_string_8) then
-							Result.extend (lang.to_string_8)
+			l_regex.compile (Header_pattern)
+			if l_regex.is_compiled then
+				l_matches := l_regex.matches (a_wiki_content)
+				from i := 1 until i > l_matches.count loop
+					if attached l_matches.item (i).group (1) as al_g then
+						l_lang := al_g.to_string_32
+						if not Result.has (l_lang.to_string_8) then
+							Result.extend (l_lang.to_string_8)
 						end
 					end
 					i := i + 1
@@ -75,30 +75,30 @@ feature -- Parsing
 			l_positions: ARRAYED_LIST [TUPLE [lang: STRING; pos: INTEGER]]
 		do
 			create Result.make (20)
-			create regex.make
-			create positions.make (20)
+			create l_regex.make
+			create l_positions.make (20)
 
-			regex.compile (Header_pattern)
-			if regex.is_compiled then
-				matches := regex.matches (a_wiki_content)
+			l_regex.compile (Header_pattern)
+			if l_regex.is_compiled then
+				l_matches := l_regex.matches (a_wiki_content)
 
 				-- Collect all header positions
-				from i := 1 until i > matches.count loop
-					if attached matches.item (i).group (1) as al_g then
-						positions.extend ([al_g.to_string_8, matches.item (i).start_position])
+				from i := 1 until i > l_matches.count loop
+					if attached l_matches.item (i).group (1) as al_g then
+						l_positions.extend ([al_g.to_string_8, l_matches.item (i).start_position])
 					end
 					i := i + 1
 				end
 
 				-- Extract code between headers
-				from j := 1 until j > positions.count loop
-					if attached {STRING} positions.i_th (j).lang as al_lang then
-						current_language := lang
+				from j := 1 until j > l_positions.count loop
+					if attached {STRING} l_positions.i_th (j).lang as al_lang then
+						l_current_language := al_lang
 					else
-						create current_language.make_empty
+						create l_current_language.make_empty
 					end
-					if attached {INTEGER} positions.i_th (j).pos as al_p then
-						current_pos := p
+					if attached {INTEGER} l_positions.i_th (j).pos as al_p then
+						current_pos := al_p
 					else
 						current_pos := 1
 					end
@@ -112,9 +112,9 @@ feature -- Parsing
 					end
 
 					-- Find next header or end
-					if j < positions.count then
-						if attached {INTEGER} positions.i_th (j + 1).pos as al_np then
-							next_pos := np
+					if j < l_positions.count then
+						if attached {INTEGER} l_positions.i_th (j + 1).pos as al_np then
+							next_pos := al_np
 						else
 							next_pos := a_wiki_content.count + 1
 						end
@@ -127,7 +127,7 @@ feature -- Parsing
 						section_content := a_wiki_content.substring (current_pos, next_pos - 1)
 						code := extract_code_from_section (section_content)
 						if not code.is_empty then
-							Result.extend ([current_language, code])
+							Result.extend ([l_current_language, code])
 						end
 					end
 
@@ -146,12 +146,12 @@ feature -- Parsing
 			l_solutions: ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
 			i: INTEGER
 		do
-			solutions := extract_solutions (a_wiki_content)
-			from i := 1 until i > solutions.count loop
-				if attached {STRING} solutions.i_th (i).language as al_lang then
+			l_solutions := extract_solutions (a_wiki_content)
+			from i := 1 until i > l_solutions.count loop
+				if attached {STRING} l_solutions.i_th (i).language as al_lang then
 					if al_lang.same_string ("Eiffel") then
-						if attached {STRING} solutions.i_th (i).code as al_co then
-							Result := co
+						if attached {STRING} l_solutions.i_th (i).code as al_co then
+							Result := al_co
 						end
 					end
 				end
@@ -179,39 +179,39 @@ feature {NONE} -- Implementation
 			create Result.make_empty
 
 			-- Try <syntaxhighlight ...>
-			if not found then
+			if not l_found then
 				start_tag := a_section.substring_index ("<syntaxhighlight", 1)
 				if start_tag > 0 then
-					tag_end := a_section.index_of ('>', start_tag)
-					if tag_end > 0 then
-						end_tag := a_section.substring_index ("</syntaxhighlight>", tag_end)
-						if end_tag > tag_end then
-							Result := a_section.substring (tag_end + 1, end_tag - 1)
+					l_tag_end := a_section.index_of ('>', start_tag)
+					if l_tag_end > 0 then
+						end_tag := a_section.substring_index ("</syntaxhighlight>", l_tag_end)
+						if end_tag > l_tag_end then
+							Result := a_section.substring (l_tag_end + 1, end_tag - 1)
 							Result := trim_code (Result)
-							found := True
+							l_found := True
 						end
 					end
 				end
 			end
 
 			-- Try <lang ...>
-			if not found then
+			if not l_found then
 				start_tag := a_section.substring_index ("<lang", 1)
 				if start_tag > 0 then
-					tag_end := a_section.index_of ('>', start_tag)
-					if tag_end > 0 then
-						end_tag := a_section.substring_index ("</lang>", tag_end)
-						if end_tag > tag_end then
-							Result := a_section.substring (tag_end + 1, end_tag - 1)
+					l_tag_end := a_section.index_of ('>', start_tag)
+					if l_tag_end > 0 then
+						end_tag := a_section.substring_index ("</lang>", l_tag_end)
+						if end_tag > l_tag_end then
+							Result := a_section.substring (l_tag_end + 1, end_tag - 1)
 							Result := trim_code (Result)
-							found := True
+							l_found := True
 						end
 					end
 				end
 			end
 
 			-- Try <pre>
-			if not found then
+			if not l_found then
 				start_tag := a_section.substring_index ("<pre>", 1)
 				if start_tag > 0 then
 					end_tag := a_section.substring_index ("</pre>", start_tag + 5)

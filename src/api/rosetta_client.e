@@ -51,17 +51,17 @@ feature -- API Operations
 			create Result.make (1500)
 			last_error.wipe_out
 
-			from done := False until done loop
-				batch := fetch_task_batch (continue_token)
+			from l_done := False until l_done loop
+				l_batch := fetch_task_batch (l_continue_token)
 				if has_error then
-					done := True
-				elseif batch.is_empty then
-					done := True
+					l_done := True
+				elseif l_batch.is_empty then
+					l_done := True
 				else
-					Result.append (batch)
-					continue_token := last_continue_token
-					if continue_token = Void then
-						done := True
+					Result.append (l_batch)
+					l_continue_token := last_continue_token
+					if l_continue_token = Void then
+						l_done := True
 					end
 				end
 			end
@@ -78,11 +78,11 @@ feature -- API Operations
 			l_encoded_name: STRING
 		do
 			last_error.wipe_out
-			encoded_name := url_encode (a_task_name)
-			url := Raw_content_url + encoded_name
+			l_encoded_name := url_encode (a_task_name)
+			l_url := Raw_content_url + l_encoded_name
 
 			wait_for_rate_limit
-			Result := curl_get (url)
+			Result := curl_get (l_url)
 			if Result /= Void and then not Result.is_empty then
 				requests_made := requests_made + 1
 			end
@@ -97,15 +97,15 @@ feature -- API Operations
 			l_solutions: ARRAYED_LIST [TUPLE [language: STRING; code: STRING]]
 			i: INTEGER
 		do
-			content := fetch_task_content (a_task_name)
-			if attached content as c and then not c.is_empty then
+			l_content := fetch_task_content (a_task_name)
+			if attached l_content as c and then not c.is_empty then
 				create Result.make (a_task_name)
 				Result.set_description (wiki_parser.extract_description (c))
 
-				solutions := wiki_parser.extract_solutions (c)
-				from i := 1 until i > solutions.count loop
-					if attached {STRING} solutions.i_th (i).language as al_lang then
-						Result.add_language (lang)
+				l_solutions := wiki_parser.extract_solutions (c)
+				from i := 1 until i > l_solutions.count loop
+					if attached {STRING} l_solutions.i_th (i).language as al_lang then
+						Result.add_language (al_lang)
 					end
 					i := i + 1
 				end
@@ -125,23 +125,23 @@ feature {NONE} -- Implementation
 			last_continue_token := Void
 			last_error.wipe_out
 
-			url := Api_endpoint + "?action=query&list=categorymembers"
-			url.append ("&cmtitle=Category:Programming_Tasks")
-			url.append ("&cmlimit=500&format=json")
+			l_url := Api_endpoint + "?action=query&list=categorymembers"
+			l_url.append ("&cmtitle=Category:Programming_Tasks")
+			l_url.append ("&cmlimit=500&format=json")
 
 			if attached a_continue_token as al_ct then
-				url.append ("&cmcontinue=")
-				url.append (url_encode (ct))
+				l_url.append ("&cmcontinue=")
+				l_url.append (url_encode (al_ct))
 			end
 
 			wait_for_rate_limit
-			response := curl_get (url)
+			l_response := curl_get (l_url)
 
-			if attached response as r and then not r.is_empty then
+			if attached l_response as r and then not r.is_empty then
 				requests_made := requests_made + 1
-				json_value := json_parser.parse (r.to_string_32)
-				if attached json_value then
-					Result := parse_task_batch (json_value)
+				l_json_value := json_parser.parse (r.to_string_32)
+				if attached l_json_value then
+					Result := parse_task_batch (l_json_value)
 				else
 					last_error := "Failed to parse JSON response"
 				end
@@ -167,25 +167,25 @@ feature {NONE} -- Implementation
 				-- Extract continue token if present
 				if attached root_obj.object_item ("continue") as al_cont then
 					if attached al_cont.string_item ("cmcontinue") as al_cm then
-						last_continue_token := safe_to_string_8 (cm)
+						last_continue_token := safe_to_string_8 (al_cm)
 					end
 				end
 
 				-- Extract tasks from query.categorymembers
 				if attached root_obj.object_item ("query") as al_query then
-					members := al_query.array_item ("categorymembers")
-					if attached members as al_mems then
-						from i := 1 until i > mems.count loop
-							member := mems.item (i)
-							if member.is_object then
-								member_obj := member.as_object
+					l_members := al_query.array_item ("categorymembers")
+					if attached l_members as al_mems then
+						from i := 1 until i > al_mems.count loop
+							l_member := al_mems.item (i)
+							if l_member.is_object then
+								member_obj := l_member.as_object
 								if attached member_obj.string_item ("title") as al_title_val then
 									if attached member_obj.string_item ("pageid") as al_pid then
-										create task.make_from_api (safe_to_string_8 (title_val), safe_to_string_8 (pid))
+										create l_task.make_from_api (safe_to_string_8 (al_title_val), safe_to_string_8 (al_pid))
 									else
-										create task.make (safe_to_string_8 (title_val))
+										create l_task.make (safe_to_string_8 (al_title_val))
 									end
-									Result.extend (task)
+									Result.extend (l_task)
 								end
 							end
 							i := i + 1
@@ -202,15 +202,15 @@ feature {NONE} -- Implementation
 			l_cmd: STRING
 			l_output: STRING_32
 		do
-			create proc.make
+			create l_proc.make
 				-- Use cmd /c (same pattern as simple_process tests)
-			cmd := "cmd /c curl -s %"" + a_url + "%""
-			l_output := proc.output_of_command (cmd)
+			l_cmd := "cmd /c curl -s %"" + a_url + "%""
+			l_output := l_proc.output_of_command (l_cmd)
 
-			if proc.was_successful and then not l_output.is_empty then
+			if l_proc.was_successful and then not l_output.is_empty then
 				Result := safe_to_string_8 (l_output)
-			elseif not proc.was_successful then
-				last_error := "curl failed: exit=" + proc.exit_code.out
+			elseif not l_proc.was_successful then
+				last_error := "curl failed: exit=" + l_proc.exit_code.out
 			end
 		end
 

@@ -69,25 +69,25 @@ feature -- Validation
 			Result := False
 
 			-- Find the file in tier directories
-			full_path := find_solution_file (a_file_name)
+			l_full_path := find_solution_file (a_file_name)
 
-			if full_path.is_empty then
+			if l_full_path.is_empty then
 				last_error := "File not found: " + a_file_name
 			else
-				create file.make_with_name (full_path)
-				if file.exists then
-					file.open_read
-					create code.make (2000)
-					from until file.end_of_file loop
-						file.read_line
-						line := file.last_string.twin
-						code.append (line)
-						code.append_character ('%N')
+				create l_file.make_with_name (l_full_path)
+				if l_file.exists then
+					l_file.open_read
+					create l_code.make (2000)
+					from until l_file.end_of_file loop
+						l_file.read_line
+						l_line := l_file.last_string.twin
+						l_code.append (l_line)
+						l_code.append_character ('%N')
 					end
-					file.close
-					Result := validate_code (code)
+					l_file.close
+					Result := validate_code (l_code)
 				else
-					last_error := "Cannot open file: " + full_path
+					last_error := "Cannot open file: " + l_full_path
 				end
 			end
 		end
@@ -115,9 +115,9 @@ feature {NONE} -- Implementation
 			i: INTEGER
 			l_lines: LIST [STRING]
 		do
-			lines := a_code.split ('%N')
-			from i := 1 until i > lines.count loop
-				if lines.i_th (i).has_substring ("feature") then
+			l_lines := a_code.split ('%N')
+			from i := 1 until i > l_lines.count loop
+				if l_lines.i_th (i).has_substring ("feature") then
 					feature_count := feature_count + 1
 				end
 				i := i + 1
@@ -145,13 +145,13 @@ feature {NONE} -- Implementation
 			l_file: PLAIN_TEXT_FILE
 		do
 			create Result.make_empty
-			tiers := <<"tier1_trivial", "tier2_easy", "tier3_moderate", "tier4_complex">>
+			l_tiers := <<"tier1_trivial", "tier2_easy", "tier3_moderate", "tier4_complex">>
 
 			from i := 1 until i > 4 or not Result.is_empty loop
-				path := solutions_path + "/" + tiers.item (i) + "/" + a_file_name
-				create file.make_with_name (path)
-				if file.exists then
-					Result := path
+				l_path := solutions_path + "/" + l_tiers.item (i) + "/" + a_file_name
+				create l_file.make_with_name (l_path)
+				if l_file.exists then
+					Result := l_path
 				end
 				i := i + 1
 			end

@@ -97,20 +97,20 @@ feature -- Import Operations
 			last_error.wipe_out
 			progress_callback := "Fetching task list from Rosetta Code..."
 
-			tasks := client.fetch_all_task_names
+			l_tasks := client.fetch_all_task_names
 			if client.has_error then
 				last_error := client.last_error
 			else
-				progress_callback := "Saving " + tasks.count.out + " tasks..."
-				from i := 1 until i > tasks.count loop
-					store.save_task (tasks.i_th (i))
+				progress_callback := "Saving " + l_tasks.count.out + " tasks..."
+				from i := 1 until i > l_tasks.count loop
+					store.save_task (l_tasks.i_th (i))
 					count := count + 1
 					if count \\ 100 = 0 then
 						progress_callback := "Saved " + count.out + " tasks..."
 					end
 					i := i + 1
 				end
-				progress_callback := "Import complete: " + tasks.count.out + " tasks"
+				progress_callback := "Import complete: " + l_tasks.count.out + " tasks"
 			end
 		end
 
@@ -128,47 +128,47 @@ feature -- Import Operations
 			last_error.wipe_out
 			progress_callback := "Fetching: " + a_task_name
 
-			content := client.fetch_task_content (a_task_name)
+			l_content := client.fetch_task_content (a_task_name)
 			if client.has_error then
 				last_error := client.last_error
-			elseif attached content as al_c then
+			elseif attached l_content as al_c then
 				-- Create or update task
 				if attached store.find_task_by_name (a_task_name) as al_existing then
-					task := existing
+					l_task := al_existing
 				else
-					create task.make (a_task_name)
+					create l_task.make (a_task_name)
 				end
 
-				task.set_description (wiki_parser.extract_description (c))
+				l_task.set_description (wiki_parser.extract_description (al_c))
 
 				-- Extract solutions
-				solutions := wiki_parser.extract_solutions (c)
+				l_solutions := wiki_parser.extract_solutions (al_c)
 
 				-- First pass: add languages to task
-				from i := 1 until i > solutions.count loop
-					if attached {STRING} solutions.i_th (i).language as al_l then
-						task.add_language (l)
+				from i := 1 until i > l_solutions.count loop
+					if attached {STRING} l_solutions.i_th (i).language as al_l then
+						l_task.add_language (al_l)
 					end
 					i := i + 1
 				end
 
 				-- Save task to get ID
-				store.save_task (task)
+				store.save_task (l_task)
 
 				-- Save solutions with correct task_id
-				if task.id > 0 then
-					from i := 1 until i > solutions.count loop
-						if attached {STRING} solutions.i_th (i).language as al_l then
-							if attached {STRING} solutions.i_th (i).code as al_co then
-								create solution.make (task.id, l, co)
-								store.save_solution (solution)
+				if l_task.id > 0 then
+					from i := 1 until i > l_solutions.count loop
+						if attached {STRING} l_solutions.i_th (i).language as al_l then
+							if attached {STRING} l_solutions.i_th (i).code as al_co then
+								create l_solution.make (l_task.id, al_l, al_co)
+								store.save_solution (l_solution)
 							end
 						end
 						i := i + 1
 					end
 				end
 
-				progress_callback := "Imported: " + a_task_name + " (" + solutions.count.out + " solutions)"
+				progress_callback := "Imported: " + a_task_name + " (" + l_solutions.count.out + " solutions)"
 			else
 				last_error := "No content returned for: " + a_task_name
 			end
@@ -190,9 +190,9 @@ feature -- Import Operations
 			end
 
 			if not has_error then
-				tasks := store.all_tasks
-				from i := 1 until i > tasks.count or count >= a_limit loop
-					import_task (tasks.i_th (i).name)
+				l_tasks := store.all_tasks
+				from i := 1 until i > l_tasks.count or count >= a_limit loop
+					import_task (l_tasks.i_th (i).name)
 					count := count + 1
 					progress_callback := "Imported " + count.out + "/" + a_limit.out + " tasks"
 					i := i + 1
@@ -266,13 +266,13 @@ feature -- Comparison
 			Result.append ("Task: " + a_task_name + "%N")
 			Result.append (create {STRING}.make_filled ('=', 50) + "%N%N")
 
-			solutions := solutions_for (a_task_name)
+			l_solutions := solutions_for (a_task_name)
 
 			from i := languages.lower until i > languages.upper loop
 				Result.append ("=== " + languages [i] + " ===%N")
-				from j := 1 until j > solutions.count loop
-					if solutions.i_th (j).language.same_string (languages [i]) then
-						Result.append (solutions.i_th (j).code)
+				from j := 1 until j > l_solutions.count loop
+					if l_solutions.i_th (j).language.same_string (languages [i]) then
+						Result.append (l_solutions.i_th (j).code)
 						Result.append ("%N%N")
 					end
 					j := j + 1
@@ -294,28 +294,28 @@ feature -- Export
 			l_task: ROSETTA_TASK
 		do
 			last_error.wipe_out
-			tasks := store.all_tasks
+			l_tasks := store.all_tasks
 
-			create file.make_create_read_write (a_path)
-			file.put_string ("id,name,has_eiffel,validated,languages%N")
+			create l_file.make_create_read_write (a_path)
+			l_file.put_string ("id,name,has_eiffel,validated,languages%N")
 
-			from i := 1 until i > tasks.count loop
-				task := tasks.i_th (i)
-				file.put_integer (task.id)
-				file.put_character (',')
-				file.put_string ("%"" + task.name + "%"")
-				file.put_character (',')
-				file.put_boolean (task.has_eiffel)
-				file.put_character (',')
-				file.put_boolean (task.is_eiffel_validated)
-				file.put_character (',')
-				file.put_integer (task.language_count)
-				file.put_new_line
+			from i := 1 until i > l_tasks.count loop
+				l_task := l_tasks.i_th (i)
+				l_file.put_integer (l_task.id)
+				l_file.put_character (',')
+				l_file.put_string ("%"" + l_task.name + "%"")
+				l_file.put_character (',')
+				l_file.put_boolean (l_task.has_eiffel)
+				l_file.put_character (',')
+				l_file.put_boolean (l_task.is_eiffel_validated)
+				l_file.put_character (',')
+				l_file.put_integer (l_task.language_count)
+				l_file.put_new_line
 				i := i + 1
 			end
 
-			file.close
-			progress_callback := "Exported " + tasks.count.out + " tasks to " + a_path
+			l_file.close
+			progress_callback := "Exported " + l_tasks.count.out + " tasks to " + a_path
 		end
 
 feature {NONE} -- Implementation
