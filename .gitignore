@@ -8,3 +8,6 @@ EIFGENs/
 live_test.db
 test_rosetta.db
 exception_trace.log
+*.melted
+*.epr
+*.log
