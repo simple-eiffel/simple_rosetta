@@ -56,7 +56,7 @@ feature -- Analysis
 			str_exists: a_str /= Void
 			not_empty: not a_str.is_empty
 		local
-			l_len, l_i: INTEGER
+			l_len: INTEGER
 			l_candidate: STRING
 			l_found: BOOLEAN
 		do

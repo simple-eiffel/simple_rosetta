@@ -65,7 +65,7 @@ feature -- Query
 			positive_denom: denom >= 1
 			reduced: gcd (num, denom) = 1
 		local
-			n, d, bit: INTEGER
+			n, d: INTEGER
 			bits: ARRAYED_LIST [INTEGER]
 		do
 			-- Convert to binary representation via continued fraction

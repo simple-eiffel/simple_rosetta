@@ -47,7 +47,6 @@ feature -- Squeeze
 			str_exists: a_str /= Void
 		local
 			l_i: INTEGER
-			l_last: CHARACTER
 			l_in_squeeze: BOOLEAN
 		do
 			create Result.make (a_str.count)

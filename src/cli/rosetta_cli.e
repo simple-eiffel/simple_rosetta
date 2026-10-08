@@ -70,7 +70,7 @@ feature -- Commands
 				l_task_name := argument (2).to_string_8
 				l_wiki := store.solution_as_wiki (l_task_name)
 				if attached l_wiki as al_w then
-					print (w)
+					print (al_w)
 					print ("%N%N-- Copy the above to Rosetta Code wiki --%N")
 				else
 					print ("Solution not found: " + l_task_name + "%N")
@@ -233,7 +233,7 @@ feature {NONE} -- Implementation
 			l_code := store.get_solution_code (a_task)
 			if attached l_code as al_c then
 				print ("Validating: " + a_task + "%N")
-				if validator.validate_code (c) then
+				if validator.validate_code (al_c) then
 					print ("  [PASS] Solution compiles correctly%N")
 				else
 					print ("  [FAIL] " + validator.last_error + "%N")

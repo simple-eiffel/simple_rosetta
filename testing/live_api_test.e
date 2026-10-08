@@ -30,7 +30,6 @@ feature -- Tests
 			parser: WIKI_PARSER
 			tasks: ARRAYED_LIST [ROSETTA_TASK]
 			task: ROSETTA_TASK
-			solution: ROSETTA_SOLUTION
 			content: detachable STRING
 			eiffel_code: detachable STRING
 			i, eiffel_found: INTEGER

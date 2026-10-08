@@ -18,7 +18,7 @@ feature -- Query
 		require
 			positive: n >= 1
 		local
-			a, b, c, d, p, q: INTEGER
+			a, b, c, d, p: INTEGER
 		do
 			create Result.make (n * n)  -- Upper bound estimate
 			-- Start with 0/1

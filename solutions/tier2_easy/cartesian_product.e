@@ -52,7 +52,7 @@ feature -- N-ary Product
 			not_empty: not lists.is_empty
 			all_not_empty: across lists as l all not l.is_empty end
 		local
-			total, i: INTEGER
+			total: INTEGER
 			indices: ARRAY [INTEGER]
 		do
 			-- Calculate total product size

@@ -63,7 +63,7 @@ feature -- Implementation
 	generate_descending_numbers: ARRAYED_LIST [INTEGER]
 			-- All numbers with strictly descending digits
 		local
-			i, j, k, l, m: INTEGER
+			i, j, k, l: INTEGER
 		do
 			create Result.make (500)
 			-- 1-digit

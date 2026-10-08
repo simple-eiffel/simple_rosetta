@@ -52,7 +52,7 @@ feature -- Generation
 			-- Duval algorithm for generating Lyndon words.
 		local
 			l_w: ARRAYED_LIST [INTEGER]
-			l_i, l_j, l_m: INTEGER
+			l_i, l_j: INTEGER
 			l_word: STRING
 		do
 			create Result.make (100)

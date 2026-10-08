@@ -49,7 +49,7 @@ feature -- Alignment
 			l_widths: ARRAY [INTEGER]
 			l_cells: ARRAYED_LIST [ARRAYED_LIST [STRING]]
 			l_row: ARRAYED_LIST [STRING]
-			l_i, l_j: INTEGER
+			l_j: INTEGER
 		do
 			l_cells := parse_cells (a_lines, a_delim)
 			l_widths := column_widths (l_cells)

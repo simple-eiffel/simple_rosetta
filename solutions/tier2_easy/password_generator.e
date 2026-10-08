@@ -66,7 +66,7 @@ feature -- Generation
 		require
 			valid_length: a_length >= 4
 		local
-			l_i, l_pos: INTEGER
+			l_i: INTEGER
 		do
 			create Result.make (a_length)
 

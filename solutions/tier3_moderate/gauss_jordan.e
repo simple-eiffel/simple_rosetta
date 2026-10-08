@@ -97,7 +97,7 @@ feature -- Operations
 			-- Convert matrix to reduced row echelon form
 		local
 			n_rows, n_cols, i, j, k, pivot_row, lead: INTEGER
-			max_val, temp, factor: REAL_64
+			temp, factor: REAL_64
 		do
 			n_rows := m.height
 			n_cols := m.width

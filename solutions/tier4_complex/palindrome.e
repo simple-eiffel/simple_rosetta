@@ -114,7 +114,7 @@ feature -- Palindrome Detection
 	longest_palindrome_substring (s: STRING): STRING
 			-- Find the longest palindromic substring in s.
 		local
-			i, j: INTEGER
+			i: INTEGER
 			max_start, max_len: INTEGER
 			len1, len2, len: INTEGER
 		do

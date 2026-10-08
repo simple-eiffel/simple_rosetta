@@ -74,7 +74,6 @@ feature -- Sorting
 		local
 			l_i1, l_i2, l_n1, l_n2: INTEGER
 			l_c1, l_c2: CHARACTER
-			l_in_number: BOOLEAN
 		do
 			l_i1 := 1
 			l_i2 := 1

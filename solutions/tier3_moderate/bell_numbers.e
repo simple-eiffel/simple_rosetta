@@ -73,7 +73,7 @@ feature -- Query
 			non_negative: n >= 0
 		local
 			prev_row: ARRAY [NATURAL_64]
-			i, j: INTEGER
+			j: INTEGER
 		do
 			if n = 0 then
 				create Result.make_filled (1, 0, 0)

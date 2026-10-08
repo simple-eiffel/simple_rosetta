@@ -21,7 +21,6 @@ feature {NONE} -- Initialization
 		local
 			graph: ARRAY [ARRAYED_LIST [INTEGER]]
 			visited: ARRAY [BOOLEAN]
-			found: BOOLEAN
 			path: ARRAYED_LIST [INTEGER]
 		do
 			print ("Depth-First Search (DFS)%N")
@@ -94,7 +93,6 @@ feature -- DFS Algorithm
 		local
 			stack: ARRAYED_LIST [INTEGER]
 			visited: ARRAY [BOOLEAN]
-			found: BOOLEAN
 			vertex, neighbor: INTEGER
 			neighbors: ARRAYED_LIST [INTEGER]
 			i: INTEGER

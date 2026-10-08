@@ -166,7 +166,7 @@ feature -- Solving
 	solve: detachable STRING
 			-- Solve using IDA* with Manhattan distance heuristic
 		local
-			limit, new_limit, result_val: INTEGER
+			limit, result_val: INTEGER
 			path: STRING
 		do
 			if is_solved then

@@ -20,7 +20,6 @@ feature {NONE} -- Initialization
 			missing: ARRAYED_LIST [STRING]
 			file: PLAIN_TEXT_FILE
 			i: INTEGER
-			task: ROSETTA_TASK
 			eiffel_names: HASH_TABLE [BOOLEAN, STRING]
 		do
 			print ("=== Eiffel Missing Tasks Report Generator ===%N%N")
