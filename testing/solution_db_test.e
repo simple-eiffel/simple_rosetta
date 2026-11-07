@@ -19,7 +19,7 @@ feature -- Tests
 			i: INTEGER
 		do
 			create store.make ("rosetta_solutions.db")
-			create importer.make (store, "D:/prod/simple_rosetta/solutions")
+			create importer.make (store, fleet_path ("simple_rosetta/solutions"))
 			importer.import_all
 
 			print ("Imported " + importer.imported_count.out + " solutions%N%N")
@@ -81,6 +81,18 @@ feature -- Tests
 			end
 
 			store.close
+		end
+
+feature {NONE} -- Fixtures
+
+	fleet_path (a_tail: STRING): STRING
+			-- `a_tail' under the folder holding the simple_* libraries.
+		do
+			if attached (create {EXECUTION_ENVIRONMENT}).item ("SIMPLE_EIFFEL") as l_root then
+				Result := l_root.to_string_8 + "/" + a_tail
+			else
+				Result := a_tail
+			end
 		end
 
 end
