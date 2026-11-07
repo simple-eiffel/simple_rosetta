@@ -15,7 +15,11 @@ feature {NONE} -- Initialization
 			-- Initialize validator.
 		do
 			create last_error.make_empty
-			solutions_path := "D:/prod/simple_rosetta/solutions"
+			if attached (create {EXECUTION_ENVIRONMENT}).item ("SIMPLE_EIFFEL") as l_root then
+				solutions_path := l_root.to_string_8 + "/simple_rosetta/solutions"
+			else
+				solutions_path := "solutions"
+			end
 		end
 
 feature -- Access
